@@ -1,0 +1,8 @@
+{% load uuid %}
+{% uuid container_uuid %}
+
+{% if report.has_form %}
+    Form errors placeholder!
+{% endif %}
+
+{% include report.template with report=report container_id=report.container_id|add:container_uuid %}

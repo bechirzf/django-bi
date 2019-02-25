@@ -1,0 +1,56 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts-en.js"></script>
+<!-- prepare a DOM container with width and height -->
+<script type="text/javascript">
+    // based on prepared DOM, initialize echarts instance
+    var dummy2Chart = echarts.init(document.getElementById("{{ container_id }}"));
+
+    // specify chart configuration item and data
+    var dummy2Option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: {%autoescape off%}{{ report.get_data_for_html.x_axis }}{%endautoescape%}
+        },
+        legend: {
+            data: ['All', 'Desktop', 'Mobile', 'App']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        series: [
+            {
+                name: 'All',
+                type: 'line',
+                data: {%autoescape off%}{{ report.get_data_for_html.y_axis_all }}{%endautoescape%}
+            },
+            {
+                name: 'Desktop',
+                type: 'line',
+                data: {%autoescape off%}{{ report.get_data_for_html.y_axis_desktop }}{%endautoescape%}
+            },
+            {
+                name: 'Mobile',
+                type: 'line',
+                data: {%autoescape off%}{{ report.get_data_for_html.y_axis_mobile }}{%endautoescape%}
+            },
+            {
+                name: 'App',
+                type: 'line',
+                data: {%autoescape off%}{{ report.get_data_for_html.y_axis_app }}{%endautoescape%}
+            }
+        ]
+    };
+
+    // use configuration item and data specified to show chart
+    dummy2Chart.setOption(dummy2Option);
+</script>
+<div id="{{ container_id }}" style="width:400px; height:200px"></div>

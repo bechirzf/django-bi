@@ -1,0 +1,48 @@
+<aside class="main-sidebar">
+    <section class="sidebar" style="height: auto;">
+        <form action="#" class="sidebar-form" method="get">
+            <div class="input-group">
+                <input class="form-control" name="q" placeholder="Search..." type="text">
+                <span class="input-group-btn">
+                <button class="btn btn-flat" id="search-btn" name="search" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+        </form>
+        <ul class="sidebar-menu tree" data-widget="tree">
+            {% for dashboard, nested_dashboards in dashboards_hierarchy.items %}
+                {% if not dashboard.0 == 'home' %}
+                    {% if current_dashboard.id == dashboard.0 or current_dashboard.get_parent_dashboard_id == dashboard.0 %}
+                        <li class="treeview active">
+                    {% else %}
+                        <li class="treeview">
+                    {% endif %}
+                <a href="{% url 'reporting:dashboard-detail' dashboard.0 %}">
+                            <i class="{{ dashboard.2 }}"></i>
+                            <span onclick="event.stopPropagation()">{{ dashboard.1 }}</span>
+                            {% if  nested_dashboards %}
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            {% endif %}
+                        </a>
+                        <ul class="treeview-menu">
+                            {% for dashboard_nested in nested_dashboards %}
+                                {% if current_dashboard.id == dashboard_nested.0 %}
+                                    <li class="active">
+                                {% else %}
+                                    <li>
+                                {% endif %}
+                            <a href="{% url 'reporting:dashboard-detail-nested' dashboard_nested.3 dashboard_nested.0 %}">
+                                        <i class="fa fa-circle-o"></i> {{ dashboard_nested.1 }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </section>
+</aside>

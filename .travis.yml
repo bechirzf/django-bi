@@ -10,3 +10,5 @@ deploy:
   on:
     tags: true
 
+install:
+  - pip install -r requirements.txt

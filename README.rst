@@ -1,7 +1,7 @@
 .. image:: https://travis-ci.org/zhelyabuzhsky/django-bi.svg?branch=master
     :target: https://travis-ci.org/zhelyabuzhsky/django-bi
 .. image:: https://img.shields.io/pypi/v/django-bi.svg
-    :alt: PyPI
+    :target: https://pypi.org/project/django-bi/
 
 =====================
 Business intelligence

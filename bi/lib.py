@@ -4,6 +4,7 @@ import os
 import sys
 from typing import Union, Dict, List, Tuple, Type
 
+from django.conf import settings
 from django.core.cache import cache
 from django.http import Http404, QueryDict
 
@@ -29,6 +30,13 @@ def get_entity_by_class(path: str, class_name: str, class_params: dict = None) -
     :param class_name: название класса
     :return:
     """
+
+    splitted_objects_path = settings.OBJECTS_PATH.split('/')
+    splitted_objects_path = splitted_objects_path[:-1]
+
+    if len(splitted_objects_path):
+        path = '.'.join(splitted_objects_path) + '.' + path
+
     try:
         module = __import__(path, globals(), locals(), ['*'])
 

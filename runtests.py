@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import sys
 import warnings
 from optparse import OptionParser
@@ -17,19 +18,31 @@ def runtests(test_path='bi'):
             }
         }
 
+        # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        TEMPLATES = [
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'DIRS': [os.path.join(BASE_DIR, 'bi/tests/fixtures/objects')],
+                'APP_DIRS': True,
+            },
+        ]
+
         # Configure test environment
         settings.configure(
             DATABASES=DATABASES,
+            TEMPLATES=TEMPLATES,
             INSTALLED_APPS=(
                 'django.contrib.contenttypes',
                 'django.contrib.auth',
                 'bi',
             ),
-            ROOT_URLCONF=None,  # tests override urlconf, but it still needs to be defined
+            ROOT_URLCONF='test_urls',
             LANGUAGES=(
                 ('en', 'English'),
             ),
             MIDDLEWARE_CLASSES=(),
+            OBJECTS_PATH='bi/tests/fixtures/objects',
         )
 
     django.setup()

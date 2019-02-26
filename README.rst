@@ -21,12 +21,16 @@ Quick start
         'bi',
     ]
 
-2. Include the bi URLconf in your project urls.py like this::
+2. Add OBJECTS_PATH setting like this::
+
+    OBJECTS_PATH='objects',
+
+3. Include the bi URLconf in your project urls.py like this::
 
     path('', include('bi.urls')),
 
-3. Run `python manage.py migrate` to create the bi models.
+4. Run `python manage.py migrate` to create the bi models.
 
-4. Start the development server.
+5. Start the development server.
 
-5. Visit http://127.0.0.1:8000/ to see your dashboards.
+6. Visit http://127.0.0.1:8000/ to see your dashboards.

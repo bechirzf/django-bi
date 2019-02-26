@@ -14,7 +14,7 @@ class LibTests(TestCase):
         self.assertEqual(transform_python_list_to_list_for_echarts([1, 2, 3]), "['1', '2', '3']")
 
     def test_get_entity_by_class(self):
-        entity = get_entity_by_class('bi.tests.fixtures.objects.reports.dummy1.report', 'Report', {})
+        entity = get_entity_by_class('objects.reports.dummy1.report', 'Report', {})
         self.assertEqual(type(entity), DummyReport1)
 
     def test_get_dashboards_hierarchy(self):

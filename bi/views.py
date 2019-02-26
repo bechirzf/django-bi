@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from objects.dashboards.home.dashboard import Dashboard as HomeDashboard
 
 from bi.lib import get_entity_by_class, get_reports_list
 
@@ -10,7 +9,7 @@ from bi.lib import get_entity_by_class, get_reports_list
 
 def index(request):
     # на главной странице выводится дашборд home
-    dashboard = HomeDashboard(request.GET)
+    dashboard = get_entity_by_class('objects.dashboards.{}.dashboard'.format('home'), 'Dashboard', request.GET)
 
     return render(request, 'bi/dashboard_detail.html', {'dashboard': dashboard})
 

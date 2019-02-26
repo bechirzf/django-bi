@@ -1,6 +1,5 @@
-.. image:: https://travis-ci.org/zhelyabuzhsky/django-bi.svg?branch=master
+.. image:: https://img.shields.io/travis/zhelyabuzhsky/django-bi.svg
     :target: https://travis-ci.org/zhelyabuzhsky/django-bi
-.. image:: https://img.shields.io/github/license/zhelyabuzhsky/django-bi.svg
 .. image:: https://img.shields.io/pypi/v/django-bi.svg
     :target: https://pypi.org/project/django-bi/
 .. image:: https://img.shields.io/pypi/dm/django-bi.svg

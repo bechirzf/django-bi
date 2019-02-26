@@ -14,16 +14,16 @@ BI is a simple Django app to conduct business intelligence.
 Quick start
 -----------
 
-1. Add "reporting" to your INSTALLED_APPS setting like this::
+1. Add "bi" to your INSTALLED_APPS setting like this::
 
     INSTALLED_APPS = [
         ...
-        'reporting',
+        'bi',
     ]
 
 2. Include the bi URLconf in your project urls.py like this::
 
-    path('', include('reporting.urls')),
+    path('', include('bi.urls')),
 
 3. Run `python manage.py migrate` to create the bi models.
 

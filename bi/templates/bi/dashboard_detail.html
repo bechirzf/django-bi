@@ -1,0 +1,10 @@
+{% extends 'bi/base.html' %}
+{% block content %}
+    {% if dashboard.has_form %}
+        <form action="" method="get">
+            {{ dashboard.get_form }}
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
+    {% include dashboard.template with dashboard=dashboard %}
+{% endblock %}

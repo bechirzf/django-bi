@@ -1,0 +1,12 @@
+{% extends 'bi/base.html' %}
+{% block content %}
+    {% if report_list %}
+        <ul>
+            {% for report in report_list %}
+                <li><a href="{% url 'bi:report-detail' report.id %}">{{ report.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No reports are available.</p>
+    {% endif %}
+{% endblock %}

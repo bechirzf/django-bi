@@ -1,0 +1,12 @@
+{% extends 'bi/base.html' %}
+{% block content %}
+    <h1>{{ report.title }}</h1>
+    <h3>{{ report.description }}</h3>
+    {% if report.has_form %}
+        <form action="" method="get">
+            {{ report.get_form }}
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
+    {% include report.template with report=report container_id=report.container_id %}
+{% endblock %}

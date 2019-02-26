@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.management import call_command
 
 
-def runtests(test_path='reporting'):
+def runtests(test_path='bi'):
     if not settings.configured:
         DATABASES = {
             'default': {
@@ -23,7 +23,7 @@ def runtests(test_path='reporting'):
             INSTALLED_APPS=(
                 'django.contrib.contenttypes',
                 'django.contrib.auth',
-                'reporting',
+                'bi',
             ),
             ROOT_URLCONF=None,  # tests override urlconf, but it still needs to be defined
             LANGUAGES=(

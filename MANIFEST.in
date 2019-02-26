@@ -1,5 +1,4 @@
 include LICENSE
 include README.rst
-recursive-include reporting/static *
-recursive-include reporting/templates *
-
+recursive-include bi/static *
+recursive-include bi/templates *

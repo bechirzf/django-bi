@@ -19,7 +19,7 @@ class BaseDashboard(ABC):
     form_class: Type[Form] = None
     form_defaults: Dict = {}
 
-    # TODO: check pararms necessity
+    # TODO: check params necessity
     def __init__(self, params: QueryDict):
         """
         Констурктор.

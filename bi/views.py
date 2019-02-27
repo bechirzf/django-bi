@@ -3,7 +3,7 @@ from django.shortcuts import render
 from bi.lib import get_entity_by_class, get_reports_list
 
 
-# TODO: добавить декоратор @login_required() к вьюхе, которая недоступна незалогиненным пользователям
+# TODO: add decorator @login_required() to view with login required
 # from django.contrib.auth.decorators import login_required
 
 

@@ -5,7 +5,7 @@ from django.forms import Form
 from django.http import QueryDict
 
 
-# TODO: сделать общий абстрактный класс с репортом, в который вынести тайтл и дескрипшн
+# TODO: make BaseObject class
 
 class BaseDashboard(ABC):
     """
@@ -19,7 +19,7 @@ class BaseDashboard(ABC):
     form_class: Type[Form] = None
     form_defaults: Dict = {}
 
-    # TODO: проверить целесоорбразность параметра парамс
+    # TODO: check pararms necessity
     def __init__(self, params: QueryDict):
         """
         Констурктор.

@@ -28,5 +28,5 @@ class BaseDataset(ABC):
         :param params:
         :return:
         """
-        # TODO: возможно лучше живьём обернуть, а не декоратором ... хз
+        # TODO: perhaps it is better to do not decorator
         return self.get_dataframe(params)

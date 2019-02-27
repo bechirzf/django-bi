@@ -44,7 +44,7 @@ def get_entity_by_class(path: str, class_name: str, class_params: dict = None) -
         return entity_class(params=class_params)
     except ModuleNotFoundError:
         # если такой репорт не найден
-        # TODO: не хорошо, что тут что-то про 404, так как тут вообще может быть не про веб
+        # TODO: not good that there are 404
         raise Http404()
 
 
@@ -56,7 +56,7 @@ def get_class_by_class_path(path: str, class_name: str, class_params: dict = Non
         return entity_class
     except ModuleNotFoundError:
         # если такой репорт не найден
-        # TODO: не хорошо, что тут что-то про 404, так как тут вообще может быть не про веб
+        # TODO: not good that there are 404
         raise Http404()
 
 

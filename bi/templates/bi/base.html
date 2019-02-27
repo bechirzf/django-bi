@@ -39,16 +39,17 @@
 
     <div class="content-wrapper">
 
-        <section class="content-header">
-            <h1>
-                {{ dashboard.title }}
-                <small>Аудитория</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="/"><i class="fa fa-home"></i> </a></li>
-                <li class="active">{{ dashboard.title }}</li>
-            </ol>
-        </section>
+        {% if dashboard.title != 'home' %}
+            <section class="content-header">
+                <h1>
+                    {{ dashboard.title }}
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/"><i class="fa fa-home"></i> </a></li>
+                    <li class="active">{{ dashboard.title }}</li>
+                </ol>
+            </section>
+        {% endif %}
 
         <section class="content">
             {% block content %}

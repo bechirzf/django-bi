@@ -7,26 +7,24 @@ from bi.lib import cache_dataframe
 
 
 class BaseDataset(ABC):
-    """
-    Абстрактный класс для всех классов датасетов (они должны быть от него отнаследованы).
+    """Base abstract class for all datasets.
     """
 
     @abstractmethod
     def get_dataframe(self, params: Dict = None) -> pd.DataFrame:
-        """
-        Возвращает данные по оси x и y (возможно несколько).
+        """Returns x and y axes data (maybe several).
 
-        :return:
+        Returns:
+            Pandas dataframe.
         """
         pass
 
     @cache_dataframe
     def get_cached_dataframe(self, params: Dict = None) -> pd.DataFrame:
-        """
-        Возвращает закешированный датафрейм.
+        """Returns cached x and y axes data (maybe several).
 
-        :param params:
-        :return:
+        Returns:
+            Pandas dataframe.5
         """
         # TODO: perhaps it is better to do not decorator
         return self.get_dataframe(params)

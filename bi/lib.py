@@ -2,7 +2,7 @@ import glob
 import hashlib
 import os
 import sys
-from typing import Union, Dict, List, Tuple, Type
+from typing import Union, Dict, List, Tuple, Type, Text
 
 from django.conf import settings
 from django.core.cache import cache
@@ -28,7 +28,7 @@ def get_entity_by_class(path: str, class_name: str, class_params: dict = None) -
     Args:
         class_params: Parameters of class (e.g. dashboard or report).
         path: File path (e.g. objects.dashboards.dummy1.dashboard).
-        class_name: Class name (e.g. Dashboard).
+        class_name: Class name (e.g. Dashboard).x`
 
     Returns:
         Dashboard of Report.
@@ -49,7 +49,7 @@ def get_entity_by_class(path: str, class_name: str, class_params: dict = None) -
         return None
 
 
-def get_reports_list(path_to_objects='') -> List[Type[BaseReport]]:
+def get_reports_list(path_to_objects: Text = '') -> List[Type[BaseReport]]:
     """Возвращает список экземпляров отчётов.
 
     :param path_to_objects:
@@ -70,14 +70,14 @@ def get_reports_list(path_to_objects='') -> List[Type[BaseReport]]:
     return reports_list
 
 
-def get_dashboards_hierarchy(path_to_objects='') -> Dict[Type[BaseDashboard], List[Type[BaseDashboard]]]:
+def get_dashboards_hierarchy(path_to_objects: Text = '') -> Dict[Type[BaseDashboard], List[Type[BaseDashboard]]]:
     """Возвращает иерархию классов дашбордов.
 
     :param path_to_objects: путь до директории с объектами (по умолчанию - пустая строка, директория в корне проекта)
     :return:
     """
 
-    def get_len_of_path_to_objects(path_to_objects_dir=''):
+    def get_len_of_path_to_objects(path_to_objects_dir: Text = '') -> int:
         return len(path_to_objects_dir.split('/')) - 1
 
     dashboards_hierarchy = {}
@@ -116,7 +116,7 @@ def convert_dashboard_class_to_tuple(dashboard_class: Type[BaseDashboard]) -> Tu
     return tuple(result)
 
 
-def get_dashboards_hierarchy_for_template(path_to_objects='') -> dict:
+def get_dashboards_hierarchy_for_template(path_to_objects: Text = '') -> dict:
     """Возвращает иерархию дашбордов в виде словаря туплов.
     Для чего это ... сделано: в темплейтах классы автоматически инстанцируются, поэтому сделано на туплах
 

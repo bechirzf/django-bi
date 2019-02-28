@@ -6,7 +6,7 @@ from typing import Union, Dict, List, Tuple, Type
 
 from django.conf import settings
 from django.core.cache import cache
-from django.http import Http404, QueryDict
+from django.http import QueryDict
 
 from bi.models.dashboard import BaseDashboard
 from bi.models.report import BaseReport
@@ -22,13 +22,16 @@ def transform_python_list_to_list_for_echarts(l: list) -> str:
 
 
 def get_entity_by_class(path: str, class_name: str, class_params: dict = None) -> Union[
-    BaseReport, BaseDashboard]:
-    """Возвращает экземпляр класса по пути до файла и имени класса.
+    BaseReport, BaseDashboard, None]:
+    """Returns class instance.
 
-    :param class_params: параметры класса отчёта
-    :param path: путь до файла класса (например, objects.dashboards.dummydashboard.dashboard
-    :param class_name: название класса
-    :return:
+    Args:
+        class_params: Parameters of class (e.g. dashboard or report).
+        path: File path (e.g. objects.dashboards.dummy1.dashboard).
+        class_name: Class name (e.g. Dashboard).
+
+    Returns:
+        Dashboard of Report.
     """
 
     splitted_objects_path = settings.OBJECTS_PATH.split('/')
@@ -43,21 +46,7 @@ def get_entity_by_class(path: str, class_name: str, class_params: dict = None) -
         entity_class = getattr(module, class_name)
         return entity_class(params=class_params)
     except ModuleNotFoundError:
-        # если такой репорт не найден
-        # TODO: not good that there are 404
-        raise Http404()
-
-
-def get_class_by_class_path(path: str, class_name: str, class_params: dict = None):
-    try:
-        module = __import__(path, globals(), locals(), ['*'])
-
-        entity_class = getattr(module, class_name)
-        return entity_class
-    except ModuleNotFoundError:
-        # если такой репорт не найден
-        # TODO: not good that there are 404
-        raise Http404()
+        return None
 
 
 def get_reports_list(path_to_objects='') -> List[Type[BaseReport]]:

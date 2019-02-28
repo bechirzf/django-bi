@@ -17,6 +17,9 @@ class LibTests(TestCase):
         entity = get_entity_by_class('objects.reports.dummy1.report', 'Report', {})
         self.assertEqual(type(entity), DummyReport1)
 
+        entity = get_entity_by_class('objects.reports.dummy100.report', 'Report', {})
+        self.assertIsNone(entity)
+
     def test_get_dashboards_hierarchy(self):
         self.assertEqual(
             {DummyBoard1: [DummyBoard3], DummyBoard2: []},

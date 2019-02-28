@@ -85,7 +85,7 @@ class BaseDashboard(ABC):
             return module_splitted[-3]
 
     @classmethod
-    def get_parent_dashboard_class(cls):
+    def get_parent_dashboard_class(cls) -> Union[Text, None]:
         """Returns class of dashboard's parent.
 
         Returns:

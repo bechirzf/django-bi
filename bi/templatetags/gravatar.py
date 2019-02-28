@@ -9,14 +9,13 @@ register = template.Library()
 
 @register.filter
 def gravatar_url(email, size=40):
-    """
-    Возвращает только урл граватара.
+    """Returns url of gravatar.
 
-    Пример использования: {{ email|gravatar_url:150 }}
+    Usage example:
+        {{ email|gravatar_url:150 }}
 
-    :param email:
-    :param size:
-    :return:
+    Returns:
+        A string with url of gravatar by e-mail.
     """
     return "https://www.gravatar.com/avatar/%s?%s" % (
         hashlib.md5(email.lower().encode('utf-8')).hexdigest(), urllib.parse.urlencode({'s': str(size)}))
@@ -24,14 +23,13 @@ def gravatar_url(email, size=40):
 
 @register.filter
 def gravatar(email, size=40):
-    """
-    Возвращает image tag граватара.
+    """Returns image html tag with gravatar.
 
-    Пример использования:  {{ email|gravatar:150 }}
+    Usage example:
+        {{ email|gravatar:150 }}
 
-    :param email:
-    :param size:
-    :return:
+    Returns:
+        A string with html tag of gravatar by e-mail.
     """
     url = gravatar_url(email, size)
     return mark_safe('<img src="%s" height="%d" width="%d">' % (url, size, size))

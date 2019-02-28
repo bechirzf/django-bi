@@ -24,7 +24,7 @@ class BaseDataset(ABC):
         """Returns cached x and y axes data (maybe several).
 
         Returns:
-            Pandas dataframe.5
+            Pandas dataframe.
         """
         # TODO: perhaps it is better to do not decorator
         return self.get_dataframe(params)

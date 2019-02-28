@@ -8,56 +8,63 @@ from django.http import QueryDict
 # TODO: make BaseObject class
 
 class BaseDashboard(ABC):
-    """
-    Базовый класс для всех классов дашбордов (они должны быть от него отнаследованы).
+    """Base abstract class for all dashboards.
 
-        form_class  Определеине класса формы
-        form_defaults   Значения полей формы по умолчанию
+    Attributes:
+        params: Dashboard parameters.
+        form_class: Report form class.
+        form_defaults: Default form inputs values.
     """
 
-    _params: QueryDict = None
-    form_class: Type[Form] = None
-    form_defaults: Dict = {}
+    _params: QueryDict
+    form_class: Type[Form]
+    form_defaults: Dict
 
     # TODO: check params necessity
     def __init__(self, params: QueryDict):
-        """
-        Констурктор.
+        """Inits dashboard.
 
-        :param params: параметры отчета
+        Args:
+            params: Dashboard parameters.
         """
         self._params = params
-        pass
+        self.form_class = None
+        self.form_defaults = {}
 
     @property
     def id(self) -> Text:
-        """
-        Идентификатор дашборда.
+        """Returns id of dashboard.
 
-        :return:
+        Returns:
+            A string with id of dashboard.
         """
         return str(self.__module__).split('.')[-2]
 
     @property
     def icon(self) -> Text:
+        """Returns icon of dashboard.
+
+        Returns:
+            A string with icon of dashboard.
+        """
         return "fa fa-pie-chart"
 
     @property
     @abstractmethod
     def title(self) -> Text:
-        """
-        Заголовок дашборда.
+        """Returns title of dashboard.
 
-        :return:
+        Returns:
+            A string with title of dashboard.
         """
         pass
 
     @property
     def template(self) -> Text:
-        """
-        Путь до темплейта дашборда.
+        """Returns path to template of dashboard.
 
-        :return:
+        Returns:
+            A string with path to template of dashboard.
         """
         if self.get_parent_dashboard_id():
             return 'dashboards/{}/{}/template.html'.format(self.get_parent_dashboard_id(), self.id)
@@ -66,6 +73,11 @@ class BaseDashboard(ABC):
 
     @classmethod
     def get_parent_dashboard_id(cls) -> Union[Text, None]:
+        """Returns id of dashboard's parent.
+
+        Returns:
+            ID of dashboard's parent.
+        """
         module_splitted = cls.__module__.split('.')
         if module_splitted[-3] == 'dashboards':
             return None
@@ -74,6 +86,11 @@ class BaseDashboard(ABC):
 
     @classmethod
     def get_parent_dashboard_class(cls):
+        """Returns class of dashboard's parent.
+
+        Returns:
+            Class of dashboard's parent.
+        """
         module_splitted = cls.__module__.split('.')
         module = __import__('.'.join(module_splitted[:-2]) + '.dashboard', globals(), locals(), ['*'])
 
@@ -81,10 +98,10 @@ class BaseDashboard(ABC):
         return entity_class
 
     def get_form(self) -> Form:
-        """
-        Возвращате экземпляр формы отчета.
+        """Returns form instance.
 
-        :return:
+        Returns:
+            Form instance.
         """
         if self.has_form():
             params = QueryDict(mutable=True)
@@ -97,9 +114,9 @@ class BaseDashboard(ABC):
             return form
 
     def has_form(self) -> bool:
-        """
-        Сущесвование формы.
+        """Returns True if dashboard has form.
 
-        :return:
+        Returns:
+            True or False.
         """
         return self.form_class is not None

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Type
+from typing import Dict, Type, Text
 
 from django.forms import Form
 from django.http import QueryDict
@@ -7,70 +7,79 @@ from django.urls import reverse
 
 
 class BaseReport(ABC):
-    """Абстрактный класс для всех классов отчётов (они должны быть от него отнаследованы).
+    """Base abstract class for all reports.
 
-        form_class  Определеине класса формы
-        form_defaults   Значения полей формы по умолчанию
+    Attributes:
+        _params: Report parameters.
+        form_class: Report form class.
+        form_defaults: Default form inputs values.
     """
-
-    _params: QueryDict = None
-
-    form_class: Type[Form] = None
-    form_defaults: Dict = {}
+    _params: QueryDict
+    form_class: Type[Form]
+    form_defaults: Dict
 
     def __init__(self, params: QueryDict) -> None:
-        """Констурктор.
+        """Inits Report.
 
-        :param params: параметры отчета
+        Args:
+            params: Report parameters.
         """
         self._params = params
+        self.form_class = None
+        self.form_defaults = {}
 
     @property
-    def id(self) -> str:
-        """Возвращает идентификатор отчёта.
+    def id(self) -> Text:
+        """Returns id of report.
 
-        :return:
+        Returns:
+            A string with id of report.
         """
         return str(self.__class__.__module__).split('.')[-2]
 
     @property
     @abstractmethod
-    def title(self) -> str:
-        """заголовок отчёта
+    def title(self) -> Text:
+        """Returns title of report.
 
-        :return:
+        Returns:
+            A string with title of report.
         """
         pass
 
     @property
     @abstractmethod
-    def description(self) -> str:
-        """описание отчёта
+    def description(self) -> Text:
+        """Returns report description.
 
-        :return:
+        Returns:
+            A string with report description.
         """
         pass
 
     @property
-    def template(self) -> str:
-        """возвращает путь до темплейта отчёта
+    def template(self) -> Text:
+        """Returns path to report template.
 
-        :return:
+        Returns:
+            A string with path to report template.
         """
         return 'reports/{}/template.html'.format(self.id)
 
     @property
-    def container_id(self) -> str:
-        """возвращает идентификатор div, в котором будет отрисован график
+    def container_id(self) -> Text:
+        """Returns graphic container id.
 
-        :return:
+        Returns:
+            A string with graphic container id.
         """
         return '{}_report'.format(self.id)
 
     def get_form(self) -> Form:
-        """Возвращате экземпляр формы отчета
+        """Returns form instance.
 
-        :return:
+        Returns:
+            Form instance.
         """
         if self.has_form():
             params = QueryDict(mutable=True)
@@ -83,15 +92,17 @@ class BaseReport(ABC):
             return form
 
     def has_form(self) -> bool:
-        """Сущесвование формы
+        """Returns True if report has form.
 
-        :return:
+        Returns:
+            True or False.
         """
         return self.form_class is not None
 
-    def get_raw_view_url(self) -> str:
-        """URL до raw entry point
+    def get_raw_view_url(self) -> Text:
+        """Returns URL for raw entry point.
 
-        :return:
+        Returns:
+            A string with url.
         """
         return reverse('bi:report-detail-raw', args=[self.id]) + '?' + self._params.urlencode()

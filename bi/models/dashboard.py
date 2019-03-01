@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Union, Dict, Type, Text
+from typing import Union, Dict, Type, Text, Optional
 
 from django.forms import Form
 from django.http import QueryDict
@@ -12,13 +12,9 @@ class BaseDashboard(ABC):
 
     Attributes:
         params: Dashboard parameters.
-        form_class: Report form class.
-        form_defaults: Default form inputs values.
     """
 
     _params: QueryDict
-    form_class: Type[Form]
-    form_defaults: Dict
 
     # TODO: check params necessity
     def __init__(self, params: QueryDict):
@@ -28,8 +24,6 @@ class BaseDashboard(ABC):
             params: Dashboard parameters.
         """
         self._params = params
-        self.form_class = None
-        self.form_defaults = {}
 
     @property
     def id(self) -> Text:
@@ -48,6 +42,18 @@ class BaseDashboard(ABC):
             A string with icon of dashboard.
         """
         return "fa fa-pie-chart"
+
+    @property
+    def form_class(self) -> Union[Type[Form], None]:
+        """Returns dashboards's form class.
+        """
+        return None
+
+    @property
+    def form_defaults(self) -> Dict:
+        """Returns dashboards's default form inputs values.
+        """
+        return {}
 
     @property
     @abstractmethod
@@ -97,7 +103,7 @@ class BaseDashboard(ABC):
         entity_class = getattr(module, 'Dashboard')
         return entity_class
 
-    def get_form(self) -> Form:
+    def get_form(self) -> Optional[Type[Form]]:
         """Returns form instance.
 
         Returns:

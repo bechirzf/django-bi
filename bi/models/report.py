@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Type, Text
+from typing import Dict, Type, Text, Union, Optional
 
 from django.forms import Form
 from django.http import QueryDict
@@ -11,12 +11,8 @@ class BaseReport(ABC):
 
     Attributes:
         _params: Report parameters.
-        form_class: Report form class.
-        form_defaults: Default form inputs values.
     """
     _params: QueryDict
-    form_class: Type[Form]
-    form_defaults: Dict
 
     def __init__(self, params: QueryDict) -> None:
         """Inits Report.
@@ -25,8 +21,6 @@ class BaseReport(ABC):
             params: Report parameters.
         """
         self._params = params
-        self.form_class = None
-        self.form_defaults = {}
 
     @property
     def id(self) -> Text:
@@ -46,6 +40,18 @@ class BaseReport(ABC):
             A string with title of report.
         """
         pass
+
+    @property
+    def form_class(self) -> Union[Type[Form], None]:
+        """Returns report's form class.
+        """
+        return None
+
+    @property
+    def form_defaults(self) -> Dict:
+        """Returns report's default form inputs values.
+        """
+        return {}
 
     @property
     @abstractmethod
@@ -75,7 +81,7 @@ class BaseReport(ABC):
         """
         return '{}_report'.format(self.id)
 
-    def get_form(self) -> Form:
+    def get_form(self) -> Optional[Type[Form]]:
         """Returns form instance.
 
         Returns:

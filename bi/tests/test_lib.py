@@ -5,6 +5,7 @@ from bi.lib import transform_python_list_to_list_for_echarts, get_entity_by_clas
 from bi.tests.fixtures.objects.dashboards.dummy1.dashboard import Dashboard as DummyBoard1
 from bi.tests.fixtures.objects.dashboards.dummy1.dummy3.dashboard import Dashboard as DummyBoard3
 from bi.tests.fixtures.objects.dashboards.dummy2.dashboard import Dashboard as DummyBoard2
+from bi.tests.fixtures.objects.dashboards.home.dashboard import Dashboard as HomeBoard
 from bi.tests.fixtures.objects.reports.dummy1.report import Report as DummyReport1
 from bi.tests.fixtures.objects.reports.dummy2.report import Report as DummyReport2
 
@@ -22,7 +23,7 @@ class LibTests(TestCase):
 
     def test_get_dashboards_hierarchy(self):
         self.assertEqual(
-            {DummyBoard1: [DummyBoard3], DummyBoard2: []},
+            {DummyBoard1: [DummyBoard3], DummyBoard2: [], HomeBoard: []},
             get_dashboards_hierarchy('bi/tests/fixtures/'))
 
     def test_get_report_list(self):
@@ -33,7 +34,8 @@ class LibTests(TestCase):
         self.assertEqual(get_dashboards_hierarchy_for_template('bi/tests/fixtures/'),
                          {('dummy1', 'Dummy board 1', 'fa fa-pie-chart', None): [
                              ('dummy3', 'Dummy board 3', 'fa fa-pie-chart', 'dummy1')],
-                             ('dummy2', 'Dummy board 2', 'fa fa-pie-chart', None): []}
+                             ('dummy2', 'Dummy board 2', 'fa fa-pie-chart', None): [],
+                             ('home', 'home', 'fa fa-dashboard', None): []}
                          )
 
     def test_convert_dashboard_class_to_tuple(self):

@@ -4,6 +4,8 @@ from typing import Union, Dict, Type, Text, Optional
 from django.forms import Form
 from django.http import QueryDict
 
+import bi.lib as lib
+
 
 # TODO: make BaseObject class
 
@@ -32,7 +34,7 @@ class BaseDashboard(ABC):
         Returns:
             A string with id of dashboard.
         """
-        return str(self.__module__).split('.')[-2]
+        return str(self.__module__).split('.')[-1]
 
     @property
     def icon(self) -> Text:
@@ -73,9 +75,9 @@ class BaseDashboard(ABC):
             A string with path to template of dashboard.
         """
         if self.get_parent_dashboard_id():
-            return 'dashboards/{}/{}/template.html'.format(self.get_parent_dashboard_id(), self.id)
+            return 'dashboards/{}/{}.html'.format(self.get_parent_dashboard_id(), self.id)
         else:
-            return 'dashboards/{}/template.html'.format(self.id)
+            return 'dashboards/{}.html'.format(self.id)
 
     @classmethod
     def get_parent_dashboard_id(cls) -> Union[Text, None]:
@@ -85,10 +87,10 @@ class BaseDashboard(ABC):
             ID of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        if module_splitted[-3] == 'dashboards':
+        if module_splitted[-2] == 'dashboards':
             return None
         else:
-            return module_splitted[-3]
+            return module_splitted[-2]
 
     @classmethod
     def get_parent_dashboard_class(cls) -> Union[Text, None]:
@@ -98,10 +100,8 @@ class BaseDashboard(ABC):
             Class of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        module = __import__('.'.join(module_splitted[:-2]) + '.dashboard', globals(), locals(), ['*'])
-
-        entity_class = getattr(module, 'Dashboard')
-        return entity_class
+        temp_path = '/'.join(module_splitted[:-1]) + '.py'
+        return lib.get_class_by_path(temp_path, 'Dashboard')
 
     def get_form(self) -> Optional[Type[Form]]:
         """Returns form instance.

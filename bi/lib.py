@@ -1,5 +1,6 @@
 import glob
 import hashlib
+import importlib
 import os
 import sys
 from typing import Union, Dict, List, Tuple, Type, Text
@@ -21,31 +22,48 @@ def transform_python_list_to_list_for_echarts(l: list) -> str:
     return '[\'' + '\', \''.join([str(i) for i in l]) + '\']'
 
 
-def get_entity_by_class(path: str, class_name: str, class_params: dict = None) -> Union[
+def get_entity_by_path(path: str, class_name: str, class_params: dict = None) -> Union[
     BaseReport, BaseDashboard, None]:
     """Returns class instance.
 
     Args:
         class_params: Parameters of class (e.g. dashboard or report).
-        path: File path (e.g. objects.dashboards.dummy1.dashboard).
-        class_name: Class name (e.g. Dashboard).x`
+        path: File path (e.g. dashboards/dummy1/dummy3.py).
+        class_name: Class name (e.g. Dashboard).`
 
     Returns:
-        Dashboard of Report.
+        Dashboard or Report.
     """
 
-    splitted_objects_path = settings.OBJECTS_PATH.split('/')
-    splitted_objects_path = splitted_objects_path[:-1]
+    cls = get_class_by_path(path, class_name)
+    if cls:
+        return cls(class_params)
+    else:
+        return None
 
-    if len(splitted_objects_path):
-        path = '.'.join(splitted_objects_path) + '.' + path
+
+def get_class_by_path(path: str, class_name: str) -> Union[Type[BaseReport], Type[BaseDashboard], None]:
+    """Returns class definition.
+
+    Args:
+        path: File path (e.g. dashboards/dummy1/dummy3.py).
+        class_name: Class name (e.g. Dashboard).`
+
+    Returns:
+        Dashboard or Report.
+    """
 
     try:
-        module = __import__(path, globals(), locals(), ['*'])
+        splitted_path = path[:-3].split('/')
+        cls_path = '.'.join(splitted_path)
+        spec = importlib.util.spec_from_file_location(cls_path, settings.OBJECTS_PATH + '/' + path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
 
-        entity_class = getattr(module, class_name)
-        return entity_class(params=class_params)
-    except ModuleNotFoundError:
+        cls = getattr(module, class_name)
+
+        return cls
+    except FileNotFoundError:
         return None
 
 
@@ -76,28 +94,22 @@ def get_dashboards_hierarchy(path_to_objects: Text = '') -> Dict[Type[BaseDashbo
     :param path_to_objects: путь до директории с объектами (по умолчанию - пустая строка, директория в корне проекта)
     :return:
     """
-
-    def get_len_of_path_to_objects(path_to_objects_dir: Text = '') -> int:
-        return len(path_to_objects_dir.split('/')) - 1
-
     dashboards_hierarchy = {}
-    files = glob.iglob(os.path.join(path_to_objects, 'objects', 'dashboards', '**', 'dashboard.py'), recursive=True)
+    files = glob.iglob(os.path.join(path_to_objects, 'objects', 'dashboards', '**', '[!_]*.py'), recursive=True)
     files = list(files)
     for file in sorted(files):
-        paths = file.split('/')
-        paths[-1] = paths[-1][0:-3]
-        module_name = '.'.join(paths)
-
-        __import__(module_name, globals(), locals(), ['*'])
-        cls = getattr(sys.modules[module_name], 'Dashboard')
-
-        if cls not in dashboards_hierarchy and len(paths) == get_len_of_path_to_objects(path_to_objects) + 4:
+        file = os.path.relpath(file, 'bi/tests/fixtures/objects/')
+        print(file)
+        cls = get_class_by_path(file, 'Dashboard')
+        if str(cls) not in [str(key) for key in dashboards_hierarchy.keys()] and len(file.split('/')) == 2:
             dashboards_hierarchy[cls] = []
-        if len(paths) == get_len_of_path_to_objects(path_to_objects) + 5:
-            if cls.get_parent_dashboard_class() not in dashboards_hierarchy.keys():
+        if len(file.split('/')) == 3:
+            if str(cls.get_parent_dashboard_class()) not in [str(key) for key in dashboards_hierarchy.keys()]:
                 dashboards_hierarchy[cls.get_parent_dashboard_class()] = [cls]
             else:
-                dashboards_hierarchy[cls.get_parent_dashboard_class()].append(cls)
+                for key in dashboards_hierarchy.keys():
+                    if str(key) == str(cls.get_parent_dashboard_class()):
+                        dashboards_hierarchy[key].append(cls)
 
     return dashboards_hierarchy
 

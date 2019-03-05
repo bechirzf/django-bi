@@ -1,11 +1,9 @@
 from django.test import TestCase
 
-from bi.lib import transform_python_list_to_list_for_echarts, get_entity_by_class, get_dashboards_hierarchy, \
+from bi.lib import transform_python_list_to_list_for_echarts, get_entity_by_path, get_class_by_path, \
+    get_dashboards_hierarchy, \
     get_dashboards_hierarchy_for_template, convert_dashboard_class_to_tuple, get_reports_list
-from bi.tests.fixtures.objects.dashboards.dummy1.dashboard import Dashboard as DummyBoard1
-from bi.tests.fixtures.objects.dashboards.dummy1.dummy3.dashboard import Dashboard as DummyBoard3
-from bi.tests.fixtures.objects.dashboards.dummy2.dashboard import Dashboard as DummyBoard2
-from bi.tests.fixtures.objects.dashboards.home.dashboard import Dashboard as HomeBoard
+from bi.tests.fixtures.objects.dashboards.dummy2 import Dashboard as DummyBoard2
 from bi.tests.fixtures.objects.reports.dummy1.report import Report as DummyReport1
 from bi.tests.fixtures.objects.reports.dummy2.report import Report as DummyReport2
 
@@ -14,17 +12,41 @@ class LibTests(TestCase):
     def test_transform_python_list_to_list_for_echarts(self):
         self.assertEqual(transform_python_list_to_list_for_echarts([1, 2, 3]), "['1', '2', '3']")
 
-    def test_get_entity_by_class(self):
-        entity = get_entity_by_class('objects.reports.dummy1.report', 'Report', {})
-        self.assertEqual(type(entity), DummyReport1)
+    def test_get_class_by_path(self):
+        entity = get_class_by_path('reports/dummy1/report.py', 'Report')
+        self.assertEqual(str(entity), "<class 'reports.dummy1.report.Report'>")
 
-        entity = get_entity_by_class('objects.reports.dummy100.report', 'Report', {})
+        entity = get_class_by_path('reports/dummy100/report.py', 'Report')
         self.assertIsNone(entity)
 
+        entity = get_class_by_path('dashboards/dummy2.py', 'Dashboard')
+        self.assertEqual(str(entity), "<class 'dashboards.dummy2.Dashboard'>")
+
+        entity = get_class_by_path('dashboards/dummy1/dummy3.py', 'Dashboard')
+        self.assertEqual(str(entity), "<class 'dashboards.dummy1.dummy3.Dashboard'>")
+
+        entity = get_class_by_path('dashboards/dummy1.py', 'Dashboard')
+        self.assertEqual(str(entity), "<class 'dashboards.dummy1.Dashboard'>")
+
+    def test_get_entity_by_path(self):
+        entity = get_entity_by_path('reports/dummy1/report.py', 'Report', {})
+        self.assertEqual(str(type(entity)), "<class 'reports.dummy1.report.Report'>")
+
+        entity = get_entity_by_path('reports/dummy100/report.py', 'Report', {})
+        self.assertIsNone(entity)
+
+        entity = get_entity_by_path('dashboards/dummy2.py', 'Dashboard', {})
+        self.assertEqual(str(type(entity)), "<class 'dashboards.dummy2.Dashboard'>")
+
+        entity = get_entity_by_path('dashboards/dummy1/dummy3.py', 'Dashboard', {})
+        self.assertEqual(str(type(entity)), "<class 'dashboards.dummy1.dummy3.Dashboard'>")
+
+        entity = get_entity_by_path('dashboards/dummy1.py', 'Dashboard', {})
+        self.assertEqual(str(type(entity)), "<class 'dashboards.dummy1.Dashboard'>")
+
     def test_get_dashboards_hierarchy(self):
-        self.assertEqual(
-            {DummyBoard1: [DummyBoard3], DummyBoard2: [], HomeBoard: []},
-            get_dashboards_hierarchy('bi/tests/fixtures/'))
+        # TODO: complete test
+        print(get_dashboards_hierarchy('bi/tests/fixtures/'))
 
     def test_get_report_list(self):
         self.assertEqual([type(item) for item in get_reports_list('bi/tests/fixtures/')],
@@ -39,5 +61,5 @@ class LibTests(TestCase):
                          )
 
     def test_convert_dashboard_class_to_tuple(self):
-        self.assertEqual(convert_dashboard_class_to_tuple(DummyBoard1),
-                         ('dummy1', 'Dummy board 1', 'fa fa-pie-chart', None))
+        self.assertEqual(convert_dashboard_class_to_tuple(DummyBoard2),
+                         ('dummy2', 'Dummy board 2', 'fa fa-pie-chart', None))

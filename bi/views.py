@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
 
-from bi.lib import get_entity_by_class, get_reports_list
+from bi.lib import get_entity_by_path, get_reports_list
 
 
 # TODO: add decorator @login_required() to view with login required
@@ -10,7 +10,7 @@ from bi.lib import get_entity_by_class, get_reports_list
 
 def index(request):
     # на главной странице выводится дашборд home
-    dashboard = get_entity_by_class('objects.dashboards.{}.dashboard'.format('home'), 'Dashboard', request.GET)
+    dashboard = get_entity_by_path('dashboards/{}.py'.format('home'), 'Dashboard', request.GET)
     if not dashboard:
         raise Http404()
 
@@ -26,7 +26,7 @@ def report_list(request):
 
 
 def report_detail(request, report_id):
-    report = get_entity_by_class('objects.reports.{}.report'.format(report_id), 'Report', request.GET)
+    report = get_entity_by_path('reports/{}/report.py'.format(report_id), 'Report', request.GET)
     if not report:
         raise Http404()
 
@@ -34,7 +34,7 @@ def report_detail(request, report_id):
 
 
 def report_detail_raw(request, report_id):
-    report = get_entity_by_class('objects.reports.{}.report'.format(report_id), 'Report', request.GET)
+    report = get_entity_by_path('reports/{}/report.py'.format(report_id), 'Report', request.GET)
     if not report:
         raise Http404()
 
@@ -42,7 +42,7 @@ def report_detail_raw(request, report_id):
 
 
 def dashboard_detail(request, dashboard_id):
-    dashboard = get_entity_by_class('objects.dashboards.{}.dashboard'.format(dashboard_id), 'Dashboard', request.GET)
+    dashboard = get_entity_by_path('dashboards/{}.py'.format(dashboard_id), 'Dashboard', request.GET)
     if not dashboard:
         raise Http404()
 
@@ -50,8 +50,8 @@ def dashboard_detail(request, dashboard_id):
 
 
 def dashboard_detail_nested(request, dashboard_id, dashboard_parent_id):
-    dashboard = get_entity_by_class(
-        'objects.dashboards.{}.{}.dashboard'.format(dashboard_parent_id, dashboard_id), 'Dashboard', request.GET)
+    dashboard = get_entity_by_path(
+        'dashboards/{}/{}.py'.format(dashboard_parent_id, dashboard_id), 'Dashboard', request.GET)
     if not dashboard:
         raise Http404()
 

@@ -46,14 +46,14 @@ class LibTests(TestCase):
 
     def test_get_dashboards_hierarchy(self):
         # TODO: complete test
-        print(get_dashboards_hierarchy('bi/tests/fixtures/'))
+        print(get_dashboards_hierarchy())
 
     def test_get_report_list(self):
         self.assertEqual([type(item) for item in get_reports_list('bi/tests/fixtures/')],
                          [DummyReport1, DummyReport2])
 
     def test_dashboards_hierarchy_for_template(self):
-        self.assertEqual(get_dashboards_hierarchy_for_template('bi/tests/fixtures/'),
+        self.assertEqual(get_dashboards_hierarchy_for_template(),
                          {('dummy1', 'Dummy board 1', 'fa fa-pie-chart', None): [
                              ('dummy3', 'Dummy board 3', 'fa fa-pie-chart', 'dummy1')],
                              ('dummy2', 'Dummy board 2', 'fa fa-pie-chart', None): [],

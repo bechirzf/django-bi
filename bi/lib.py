@@ -88,18 +88,14 @@ def get_reports_list(path_to_objects: Text = '') -> List[Type[BaseReport]]:
     return reports_list
 
 
-def get_dashboards_hierarchy(path_to_objects: Text = '') -> Dict[Type[BaseDashboard], List[Type[BaseDashboard]]]:
+def get_dashboards_hierarchy() -> Dict[Type[BaseDashboard], List[Type[BaseDashboard]]]:
     """Возвращает иерархию классов дашбордов.
-
-    :param path_to_objects: путь до директории с объектами (по умолчанию - пустая строка, директория в корне проекта)
-    :return:
     """
     dashboards_hierarchy = {}
-    files = glob.iglob(os.path.join(path_to_objects, 'objects', 'dashboards', '**', '[!_]*.py'), recursive=True)
+    files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'dashboards', '**', '[!_]*.py'), recursive=True)
     files = list(files)
     for file in sorted(files):
-        file = os.path.relpath(file, 'bi/tests/fixtures/objects/')
-        print(file)
+        file = os.path.relpath(file, settings.OBJECTS_PATH + '/')
         cls = get_class_by_path(file, 'Dashboard')
         if str(cls) not in [str(key) for key in dashboards_hierarchy.keys()] and len(file.split('/')) == 2:
             dashboards_hierarchy[cls] = []
@@ -128,14 +124,14 @@ def convert_dashboard_class_to_tuple(dashboard_class: Type[BaseDashboard]) -> Tu
     return tuple(result)
 
 
-def get_dashboards_hierarchy_for_template(path_to_objects: Text = '') -> dict:
+def get_dashboards_hierarchy_for_template() -> dict:
     """Возвращает иерархию дашбордов в виде словаря туплов.
     Для чего это ... сделано: в темплейтах классы автоматически инстанцируются, поэтому сделано на туплах
 
     :param path_to_objects:
     :return:
     """
-    dashboards_hierarchy_class = get_dashboards_hierarchy(path_to_objects)
+    dashboards_hierarchy_class = get_dashboards_hierarchy()
     dashboards_hierarchy_for_template = {}
 
     for dashboards_hierarchy_class_key in dashboards_hierarchy_class.keys():

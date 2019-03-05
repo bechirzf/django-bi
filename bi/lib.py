@@ -3,13 +3,12 @@ import hashlib
 import importlib
 import os
 import sys
-from typing import Union, Dict, List, Tuple, Type, Text
+from typing import List, Tuple, Type, Text
 
 from django.conf import settings
 from django.core.cache import cache
 from django.http import QueryDict
 
-from bi.models.dashboard import BaseDashboard
 from bi.models.report import BaseReport
 
 
@@ -22,8 +21,7 @@ def transform_python_list_to_list_for_echarts(l: list) -> str:
     return '[\'' + '\', \''.join([str(i) for i in l]) + '\']'
 
 
-def get_entity_by_path(path: str, class_name: str, class_params: dict = None) -> Union[
-    BaseReport, BaseDashboard, None]:
+def get_entity_by_path(path: str, class_name: str, class_params: dict = None):
     """Returns class instance.
 
     Args:
@@ -42,7 +40,7 @@ def get_entity_by_path(path: str, class_name: str, class_params: dict = None) ->
         return None
 
 
-def get_class_by_path(path: str, class_name: str) -> Union[Type[BaseReport], Type[BaseDashboard], None]:
+def get_class_by_path(path: str, class_name: str):
     """Returns class definition.
 
     Args:
@@ -88,7 +86,7 @@ def get_reports_list(path_to_objects: Text = '') -> List[Type[BaseReport]]:
     return reports_list
 
 
-def get_dashboards_hierarchy() -> Dict[Type[BaseDashboard], List[Type[BaseDashboard]]]:
+def get_dashboards_hierarchy():
     """Возвращает иерархию классов дашбордов.
     """
     dashboards_hierarchy = {}
@@ -110,7 +108,7 @@ def get_dashboards_hierarchy() -> Dict[Type[BaseDashboard], List[Type[BaseDashbo
     return dashboards_hierarchy
 
 
-def convert_dashboard_class_to_tuple(dashboard_class: Type[BaseDashboard]) -> Tuple:
+def convert_dashboard_class_to_tuple(dashboard_class) -> Tuple:
     """Преобразует класс дашборда в тупл для использования в шаблонах.
 
     :param dashboard_class:

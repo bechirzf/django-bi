@@ -4,7 +4,7 @@ from typing import Union, Dict, Type, Text, Optional
 from django.forms import Form
 from django.http import QueryDict
 
-import bi.lib as lib
+from bi.lib import get_class_by_path
 
 
 # TODO: make BaseObject class
@@ -101,7 +101,7 @@ class BaseDashboard(ABC):
         """
         module_splitted = cls.__module__.split('.')
         temp_path = '/'.join(module_splitted[:-1]) + '.py'
-        return lib.get_class_by_path(temp_path, 'Dashboard')
+        return get_class_by_path(temp_path, 'Dashboard')
 
     def get_form(self) -> Optional[Type[Form]]:
         """Returns form instance.

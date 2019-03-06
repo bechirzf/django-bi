@@ -33,7 +33,7 @@ class PyTest(TestCommand):
 setup(
     name='django-bi',
     version='1.0.10',
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests*']),
     include_package_data=True,
     license='GPLv3 License',
     description='A simple Django app to conduct business intelligence.',

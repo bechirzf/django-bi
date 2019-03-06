@@ -4,3 +4,4 @@ build/
 dist/
 django_bi.egg-info/
 __pycache__/
+.eggs/

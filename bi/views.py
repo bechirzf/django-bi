@@ -26,7 +26,7 @@ def report_list(request):
 
 
 def report_detail(request, report_id):
-    report = get_entity_by_path('reports/{}/report.py'.format(report_id), 'Report', request.GET)
+    report = get_entity_by_path('reports/{}.py'.format(report_id), 'Report', request.GET)
     if not report:
         raise Http404()
 
@@ -34,7 +34,7 @@ def report_detail(request, report_id):
 
 
 def report_detail_raw(request, report_id):
-    report = get_entity_by_path('reports/{}/report.py'.format(report_id), 'Report', request.GET)
+    report = get_entity_by_path('reports/{}.py'.format(report_id), 'Report', request.GET)
     if not report:
         raise Http404()
 

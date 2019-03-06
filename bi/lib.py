@@ -2,8 +2,7 @@ import glob
 import hashlib
 import importlib
 import os
-import sys
-from typing import List, Tuple, Type, Text
+from typing import List, Tuple, Type
 
 from django.conf import settings
 from django.core.cache import cache
@@ -65,24 +64,18 @@ def get_class_by_path(path: str, class_name: str):
         return None
 
 
-def get_reports_list(path_to_objects: Text = '') -> List[Type[BaseReport]]:
+def get_reports_list() -> List[Type[BaseReport]]:
     """Возвращает список экземпляров отчётов.
-
-    :param path_to_objects:
-    :return:
     """
     reports_list = []
-    files = glob.iglob(os.path.join(path_to_objects, 'objects', 'reports', '**', 'report.py'), recursive=True)
+    files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'reports', '**', '[!_]*.py'), recursive=True)
     files = list(files)
     for file in sorted(files):
-        paths = file.split('/')
-        paths[-1] = paths[-1][0:-3]
-        module_name = '.'.join(paths)
-
-        __import__(module_name, globals(), locals(), ['*'])
-        cls = getattr(sys.modules[module_name], 'Report')
-
-        reports_list.append(cls(QueryDict()))
+        file = os.path.relpath(file, settings.OBJECTS_PATH + '/')
+        print(file)
+        report = get_entity_by_path(file, 'Report')
+        print(report)
+        reports_list.append(report)
     return reports_list
 
 

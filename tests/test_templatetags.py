@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from bi.templatetags.gravatar import gravatar_url, gravatar
-from tests.fixtures.objects.reports.dummy1.report import Report as DummyReport1
+from tests.fixtures.objects.reports.dummy1 import Report as DummyReport1
 
 
 class TemplateTagsTests(TestCase):

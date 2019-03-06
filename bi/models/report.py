@@ -29,7 +29,7 @@ class BaseReport(ABC):
         Returns:
             A string with id of report.
         """
-        return str(self.__class__.__module__).split('.')[-2]
+        return str(self.__class__.__module__).split('.')[-1]
 
     @property
     @abstractmethod
@@ -70,7 +70,7 @@ class BaseReport(ABC):
         Returns:
             A string with path to report template.
         """
-        return 'reports/{}/template.html'.format(self.id)
+        return 'reports/{}.html'.format(self.id)
 
     @property
     def container_id(self) -> Text:

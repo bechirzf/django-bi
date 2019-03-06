@@ -2,7 +2,7 @@ from django.http import QueryDict
 from django.test import TestCase
 
 from bi.lib import get_entity_by_path, get_class_by_path
-from bi.tests.fixtures.objects.reports.dummy1.report import Report as DummyReport1
+from tests.fixtures.objects.reports.dummy1.report import Report as DummyReport1
 
 
 class DashboardTests(TestCase):

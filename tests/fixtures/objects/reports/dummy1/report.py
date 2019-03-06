@@ -1,14 +1,14 @@
 from bi.lib import transform_python_list_to_list_for_echarts
 from bi.models.report import BaseReport
-from bi.tests.fixtures.objects.datasets.dummy import DummyDataset
+from tests.fixtures.objects.datasets.dummy import DummyDataset
 
 
 class Report(BaseReport):
     """
     Пример отчёта для тестов и образца. Не менять!
     """
-    title = 'Dummy report 2'
-    description = 'Dummy report 2 для примера и тестов'
+    title = 'Dummy report 1'
+    description = 'Dummy report 1 для примера и тестов'
 
     def get_data_for_html(self) -> dict:
         dataset = DummyDataset()

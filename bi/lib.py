@@ -1,8 +1,8 @@
 import glob
 import hashlib
-import importlib
 import os
-from typing import List, Tuple, Type
+from importlib.util import spec_from_file_location, module_from_spec
+from typing import List, Tuple, Type, Union, Dict, TYPE_CHECKING
 
 from django.conf import settings
 from django.core.cache import cache
@@ -10,17 +10,24 @@ from django.http import QueryDict
 
 from bi.models.report import BaseReport
 
+if TYPE_CHECKING:
+    from bi.models.dashboard import BaseDashboard
+
 
 def transform_python_list_to_list_for_echarts(l: list) -> str:
-    """Преобразует питоновский лист в строку вида '['abc', 'efg']' для echarts.
+    """Transform python list to string for echarts e.g. '['abc', 'efg']'.
 
-    :param l: список, который нужно преобразовать
-    :return: строка для echarts
+    Args:
+        l: list to transform.
+
+    Returns:
+        String for echarts.
     """
     return '[\'' + '\', \''.join([str(i) for i in l]) + '\']'
 
 
-def get_entity_by_path(path: str, class_name: str, class_params: dict = None):
+def get_entity_by_path(path: str, class_name: str, class_params: dict = None) \
+        -> Union[BaseReport, 'BaseDashboard', None]:
     """Returns class instance.
 
     Args:
@@ -31,7 +38,6 @@ def get_entity_by_path(path: str, class_name: str, class_params: dict = None):
     Returns:
         Dashboard or Report.
     """
-
     cls = get_class_by_path(path, class_name)
     if cls:
         return cls(class_params)
@@ -39,8 +45,8 @@ def get_entity_by_path(path: str, class_name: str, class_params: dict = None):
         return None
 
 
-def get_class_by_path(path: str, class_name: str):
-    """Returns class definition.
+def get_class_by_path(path: str, class_name: str) -> Union[Type[BaseReport], Type['BaseDashboard'], None]:
+    """Get class definition by path to file.
 
     Args:
         path: File path (e.g. dashboards/dummy1/dummy3.py).
@@ -49,12 +55,11 @@ def get_class_by_path(path: str, class_name: str):
     Returns:
         Dashboard or Report.
     """
-
     try:
         splitted_path = path[:-3].split('/')
         cls_path = '.'.join(splitted_path)
-        spec = importlib.util.spec_from_file_location(cls_path, settings.OBJECTS_PATH + '/' + path)
-        module = importlib.util.module_from_spec(spec)
+        spec = spec_from_file_location(cls_path, settings.OBJECTS_PATH + '/' + path)
+        module = module_from_spec(spec)
         spec.loader.exec_module(module)
 
         cls = getattr(module, class_name)
@@ -64,23 +69,27 @@ def get_class_by_path(path: str, class_name: str):
         return None
 
 
-def get_reports_list() -> List[Type[BaseReport]]:
-    """Возвращает список экземпляров отчётов.
+def get_reports_list() -> List[Union[BaseReport, None]]:
+    """Get list of reports instances.
+
+    Returns:
+        List of reports instances.
     """
     reports_list = []
     files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'reports', '**', '[!_]*.py'), recursive=True)
     files = list(files)
     for file in sorted(files):
         file = os.path.relpath(file, settings.OBJECTS_PATH + '/')
-        print(file)
         report = get_entity_by_path(file, 'Report')
-        print(report)
         reports_list.append(report)
     return reports_list
 
 
-def get_dashboards_hierarchy():
-    """Возвращает иерархию классов дашбордов.
+def get_dashboards_hierarchy() -> Dict[Type['BaseDashboard'], List[Type['BaseDashboard']]]:
+    """Get hierarchy of dashboards classes.
+
+    Returns:
+        Dict of dashboards classes.
     """
     dashboards_hierarchy = {}
     files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'dashboards', '**', '[!_]*.py'), recursive=True)
@@ -101,11 +110,14 @@ def get_dashboards_hierarchy():
     return dashboards_hierarchy
 
 
-def convert_dashboard_class_to_tuple(dashboard_class) -> Tuple:
-    """Преобразует класс дашборда в тупл для использования в шаблонах.
+def convert_dashboard_class_to_tuple(dashboard_class: Type['BaseDashboard']) -> Tuple:
+    """Transforms dashboard to tuple for template.
 
-    :param dashboard_class:
-    :return:
+    Args:
+        Dashboard to transform.
+
+    Returns:
+        Tuple with dashboard info.
     """
     board = dashboard_class(QueryDict())
     result = [board.id,
@@ -115,12 +127,11 @@ def convert_dashboard_class_to_tuple(dashboard_class) -> Tuple:
     return tuple(result)
 
 
-def get_dashboards_hierarchy_for_template() -> dict:
-    """Возвращает иерархию дашбордов в виде словаря туплов.
-    Для чего это ... сделано: в темплейтах классы автоматически инстанцируются, поэтому сделано на туплах
+def get_dashboards_hierarchy_for_template() -> Dict:
+    """Get dashboard hierarchy for using in template.
 
-    :param path_to_objects:
-    :return:
+    Returns:
+         Dictionary with dashboard hierarchy.
     """
     dashboards_hierarchy_class = get_dashboards_hierarchy()
     dashboards_hierarchy_for_template = {}
@@ -135,13 +146,15 @@ def get_dashboards_hierarchy_for_template() -> dict:
 
 
 def cache_dataframe(fn):
-    """
-    Декоратор для кеширования датафрейма в методе get_dataframe датасета.
+    """Decorator for caching dataframe in dataset's get_dataframe method.
 
-    :param fn:
-    :return:
+    Args:
+        fn: dataset's get_dataframe method.
+
+    Returns:
+        Cached pandas dataframe.
     """
-    CACHE_TIMOUT = 1 * 7 * 24 * 60 * 60  # неделя
+    cache_timeout = 1 * 7 * 24 * 60 * 60  # неделя
 
     def cache_get_key(*args):
         serialise = []
@@ -157,7 +170,7 @@ def cache_dataframe(fn):
         result = cache.get(_cache_key)
         if result is None:
             result = fn(dataset, params)
-            cache.set(_cache_key, result, CACHE_TIMOUT)
+            cache.set(_cache_key, result, cache_timeout)
         return result
 
     return memoized_func

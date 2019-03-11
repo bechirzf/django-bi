@@ -16,6 +16,9 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'fixtures/objects')],
         'APP_DIRS': True,
+        'OPTIONS': {
+            'builtins': ['bi.templatetags.report'],
+        },
     }
 ]
 
@@ -34,3 +37,4 @@ LANGUAGES = (
 MIDDLEWARE_CLASSES = ()
 
 OBJECTS_PATH = 'tests/fixtures/objects'
+

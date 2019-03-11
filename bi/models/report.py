@@ -70,7 +70,8 @@ class BaseReport(ABC):
         Returns:
             A string with path to report template.
         """
-        return 'reports/{}.html'.format(self.id)
+        # TODO: rework!!11111
+        return '/'.join(self.__module__.split('.')[self.__module__.split('.').index('reports'):]) + '.html'
 
     @property
     def container_id(self) -> Text:

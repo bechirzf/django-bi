@@ -46,7 +46,7 @@ class LibTests(TestCase):
         self.assertEqual(len(get_dashboards_hierarchy()), 3)
 
     def test_get_report_list(self):
-        self.assertEqual(len(get_reports_list()), 2)
+        self.assertEqual(len(get_reports_list()), 3)
 
     def test_dashboards_hierarchy_for_template(self):
         self.assertEqual(get_dashboards_hierarchy_for_template(),

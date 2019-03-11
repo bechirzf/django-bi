@@ -2,6 +2,7 @@ from django.http import QueryDict
 from django.test import TestCase
 
 from bi.lib import get_entity_by_path, get_class_by_path
+from tests.fixtures.objects.reports.dummy.dummy3 import Report as DummyReport3
 from tests.fixtures.objects.reports.dummy1 import Report as DummyReport1
 
 
@@ -34,6 +35,8 @@ class ReportTests(TestCase):
     def test_template(self):
         dr1 = DummyReport1(QueryDict())
         self.assertEqual(dr1.template, 'reports/dummy1.html')
+        dr3 = DummyReport3(QueryDict())
+        self.assertEqual(dr3.template, 'reports/dummy/dummy3.html')
 
     def test_container_id(self):
         dr1 = DummyReport1(QueryDict())

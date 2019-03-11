@@ -37,4 +37,3 @@ LANGUAGES = (
 MIDDLEWARE_CLASSES = ()
 
 OBJECTS_PATH = 'tests/fixtures/objects'
-

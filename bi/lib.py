@@ -2,7 +2,7 @@ import glob
 import hashlib
 import os
 from importlib.util import spec_from_file_location, module_from_spec
-from typing import List, Tuple, Type, Union, Dict, TYPE_CHECKING
+from typing import List, Tuple, Type, Union, Dict, Text, TYPE_CHECKING
 
 from django.conf import settings
 from django.core.cache import cache
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from bi.models.dashboard import BaseDashboard
 
 
-def transform_python_list_to_list_for_echarts(l: list) -> str:
+def transform_python_list_to_list_for_echarts(l: List) -> Text:
     """Transform python list to string for echarts e.g. '['abc', 'efg']'.
 
     Args:
@@ -26,7 +26,7 @@ def transform_python_list_to_list_for_echarts(l: list) -> str:
     return '[\'' + '\', \''.join([str(i) for i in l]) + '\']'
 
 
-def get_entity_by_path(path: str, class_name: str, class_params: dict = None) \
+def get_entity_by_path(path: Text, class_name: Text, class_params: Dict = None) \
         -> Union[BaseReport, 'BaseDashboard', None]:
     """Returns class instance.
 
@@ -45,7 +45,7 @@ def get_entity_by_path(path: str, class_name: str, class_params: dict = None) \
         return None
 
 
-def get_class_by_path(path: str, class_name: str) -> Union[Type[BaseReport], Type['BaseDashboard'], None]:
+def get_class_by_path(path: Text, class_name: Text) -> Union[Type[BaseReport], Type['BaseDashboard'], None]:
     """Get class definition by path to file.
 
     Args:
@@ -145,35 +145,32 @@ def get_dashboards_hierarchy_for_template() -> Dict:
     return dashboards_hierarchy_for_template
 
 
-def cache_dataframe(cache_timeout):
+def cache_dataframe(fn):
     """Decorator for caching dataframe in dataset's get_dataframe method.
 
     Args:
-        cache_timeout: timeout to store cache.
+        fn: dataset's get_dataframe method.
 
     Returns:
         Cached pandas dataframe.
     """
+    cache_timeout = 1 * 7 * 24 * 60 * 60  # неделя
 
-    def cache_dataframe_decorator(fn):
+    def cache_get_key(*args):
+        serialise = []
+        for arg in args:
+            serialise.append(str(arg))
 
-        def cache_get_key(*args):
-            serialise = []
-            for arg in args:
-                serialise.append(str(arg))
+        full_str = ''.join(serialise).encode('utf-8')
+        key = hashlib.md5(full_str).hexdigest()
+        return key
 
-            full_str = ''.join(serialise).encode('utf-8')
-            key = hashlib.md5(full_str).hexdigest()
-            return key
+    def memoized_func(dataset, params=None):
+        _cache_key = cache_get_key(fn.__name__, type(dataset), params)
+        result = cache.get(_cache_key)
+        if result is None:
+            result = fn(dataset, params)
+            cache.set(_cache_key, result, cache_timeout)
+        return result
 
-        def memoized_func(dataset, params=None):
-            _cache_key = cache_get_key(fn.__name__, type(dataset), params)
-            result = cache.get(_cache_key)
-            if result is None:
-                result = fn(dataset, params)
-                cache.set(_cache_key, result, cache_timeout)
-            return result
-
-        return memoized_func
-
-    return cache_dataframe_decorator
+    return memoized_func

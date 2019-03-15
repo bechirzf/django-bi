@@ -1,4 +1,13 @@
 {% load gravatar %}
+
+<script>
+    // TODO: move to separate js file
+    async function flushCache() {
+        let response = await fetch('/api/flush-cache/');
+        return await response.json();
+    }
+</script>
+
 <header class="main-header">
 
     <a class="logo" href="/">
@@ -12,6 +21,11 @@
         </a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" aria-expanded="false" onclick="flushCache()" title="Flush cache">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                </li>
                 {% if user.is_authenticated %}
                     <li class="dropdown user user-menu">
                         <!-- Menu Toggle Button -->

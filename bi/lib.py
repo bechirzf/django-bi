@@ -145,32 +145,35 @@ def get_dashboards_hierarchy_for_template() -> Dict:
     return dashboards_hierarchy_for_template
 
 
-def cache_dataframe(fn):
+def cache_dataframe(cache_timeout):
     """Decorator for caching dataframe in dataset's get_dataframe method.
 
     Args:
-        fn: dataset's get_dataframe method.
+        cache_timeout: timeout to store cache.
 
     Returns:
         Cached pandas dataframe.
     """
-    cache_timeout = 1 * 7 * 24 * 60 * 60  # неделя
 
-    def cache_get_key(*args):
-        serialise = []
-        for arg in args:
-            serialise.append(str(arg))
+    def cache_dataframe_decorator(fn):
 
-        full_str = ''.join(serialise).encode('utf-8')
-        key = hashlib.md5(full_str).hexdigest()
-        return key
+        def cache_get_key(*args):
+            serialise = []
+            for arg in args:
+                serialise.append(str(arg))
 
-    def memoized_func(dataset, params=None):
-        _cache_key = cache_get_key(fn.__name__, type(dataset), params)
-        result = cache.get(_cache_key)
-        if result is None:
-            result = fn(dataset, params)
-            cache.set(_cache_key, result, cache_timeout)
-        return result
+            full_str = ''.join(serialise).encode('utf-8')
+            key = hashlib.md5(full_str).hexdigest()
+            return key
 
-    return memoized_func
+        def memoized_func(dataset, params=None):
+            _cache_key = cache_get_key(fn.__name__, type(dataset), params)
+            result = cache.get(_cache_key)
+            if result is None:
+                result = fn(dataset, params)
+                cache.set(_cache_key, result, cache_timeout)
+            return result
+
+        return memoized_func
+
+    return cache_dataframe_decorator

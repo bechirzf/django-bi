@@ -17,4 +17,6 @@ urlpatterns = [
     # example: /dashboards/Dummy/DummyReport1/
     path('dashboards/<dashboard_parent_id>/<dashboard_id>/', views.dashboard_detail_nested,
          name='dashboard-detail-nested'),
+    # example: /api/flush-cache/
+    path('api/flush-cache/', views.flush_cache, name='flush-cache'),
 ]

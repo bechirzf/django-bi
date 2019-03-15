@@ -1,4 +1,6 @@
+from django.core.cache import cache
 from django.http import Http404
+from django.http import JsonResponse
 from django.shortcuts import render
 
 from bi.lib import get_entity_by_path, get_reports_list
@@ -56,3 +58,8 @@ def dashboard_detail_nested(request, dashboard_id, dashboard_parent_id):
         raise Http404()
 
     return render(request, 'bi/dashboard_detail.html', {'dashboard': dashboard})
+
+
+def flush_cache(request):
+    cache.clear()
+    return JsonResponse({'Result': 'Ok'})

@@ -19,9 +19,11 @@ class BaseDataset(ABC):
         """
         pass
 
-    @cache_dataframe
+    @cache_dataframe(cache_timeout=1 * 7 * 24 * 60 * 60)
     def get_cached_dataframe(self, params: Dict = None) -> pd.DataFrame:
         """Returns cached x and y axes data (maybe several).
+
+        Default cache timeout - a week
 
         Returns:
             Pandas dataframe.

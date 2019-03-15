@@ -160,7 +160,6 @@ def cache_dataframe(fn):
         serialise = []
         for arg in args:
             serialise.append(str(arg))
-
         full_str = ''.join(serialise).encode('utf-8')
         key = hashlib.md5(full_str).hexdigest()
         return key

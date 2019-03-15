@@ -1,11 +1,14 @@
+import warnings
 from typing import Dict
 
 import pandas as pd
 
+from bi.lib import cache_dataframe
 from bi.models.dataset import BaseDataset
 
 
 class DummyDataset(BaseDataset):
+    @cache_dataframe
     def get_dataframe(self, params: Dict = None) -> pd.DataFrame:
         data = dict([('x_axis',
                       ['2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18',
@@ -20,4 +23,5 @@ class DummyDataset(BaseDataset):
                       [43656, 45167, 47099, 47766, 48462, 47916, 45739, 43639, 48061, 81745, 13876]),
                      ])
         df = pd.DataFrame.from_dict(data)
+        warnings.warn("nocache", Warning)
         return df

@@ -12,7 +12,7 @@ class Report(BaseReport):
 
     def get_data_for_html(self) -> dict:
         dataset = DummyDataset()
-        data = dataset.get_cached_dataframe()
+        data = dataset.get_dataframe()
 
         x_axis = data['x_axis'].values.tolist()
         y_axis_all = data['y_axis_all'].values.tolist()

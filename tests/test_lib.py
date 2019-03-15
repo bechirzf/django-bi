@@ -1,9 +1,11 @@
+from django.core.cache import cache
 from django.test import TestCase
 
 from bi.lib import transform_python_list_to_list_for_echarts, get_entity_by_path, get_class_by_path, \
     get_dashboards_hierarchy, \
     get_dashboards_hierarchy_for_template, convert_dashboard_class_to_tuple, get_reports_list
 from tests.fixtures.objects.dashboards.dummy2 import Dashboard as DummyBoard2
+from tests.fixtures.objects.datasets.dummy import DummyDataset
 
 
 class LibTests(TestCase):
@@ -59,3 +61,11 @@ class LibTests(TestCase):
     def test_convert_dashboard_class_to_tuple(self):
         self.assertEqual(convert_dashboard_class_to_tuple(DummyBoard2),
                          ('dummy2', 'Dummy board 2', 'fa fa-pie-chart', None))
+
+    def test_cache_dataframe_decorator(self):
+        cache.clear()
+        dds = DummyDataset()
+        self.assertIsNone(cache.get('e91512c4b6dcea93340051da4b984ef5'))
+        with self.assertWarnsMessage(Warning, 'nocache'):
+            dds.get_dataframe()
+        self.assertIsNotNone(cache.get('e91512c4b6dcea93340051da4b984ef5'))

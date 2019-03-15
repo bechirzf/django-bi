@@ -162,6 +162,7 @@ def cache_dataframe(fn):
             serialise.append(str(arg))
         full_str = ''.join(serialise).encode('utf-8')
         key = hashlib.md5(full_str).hexdigest()
+        # TODO: убрать мд5, возвращаться в формате <dataset_name>.md5(параметры)
         return key
 
     def memoized_func(dataset, params=None):

@@ -1,4 +1,3 @@
-import warnings
 from typing import Dict
 
 import pandas as pd
@@ -23,5 +22,4 @@ class DummyDataset(BaseDataset):
                       [43656, 45167, 47099, 47766, 48462, 47916, 45739, 43639, 48061, 81745, 13876]),
                      ])
         df = pd.DataFrame.from_dict(data)
-        warnings.warn("nocache", Warning)
         return df

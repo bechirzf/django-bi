@@ -66,6 +66,8 @@ class LibTests(TestCase):
         cache.clear()
         dds = DummyDataset()
         self.assertIsNone(cache.get('e91512c4b6dcea93340051da4b984ef5'))
-        with self.assertWarnsMessage(Warning, 'nocache'):
-            dds.get_dataframe()
+        dds.get_dataframe()
         self.assertIsNotNone(cache.get('e91512c4b6dcea93340051da4b984ef5'))
+        cache_time = cache._expire_info.get(cache.make_key('e91512c4b6dcea93340051da4b984ef5'))
+        dds.get_dataframe()
+        self.assertEqual(cache._expire_info.get(cache.make_key('e91512c4b6dcea93340051da4b984ef5')), cache_time)

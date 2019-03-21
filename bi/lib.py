@@ -160,13 +160,13 @@ def cache_dataframe(fn):
         serialise = []
         for arg in args:
             serialise.append(str(arg))
-        full_str = ''.join(serialise).encode('utf-8')
+        full_str = '.'.join(serialise).encode('utf-8')
         key = hashlib.md5(full_str).hexdigest()
-        # TODO: убрать мд5, возвращаться в формате <dataset_name>.md5(параметры)
+        # TODO: remove md5, return in format <dataset_name>.md5(params)
         return key
 
     def memoized_func(dataset, params=None):
-        _cache_key = cache_get_key(fn.__name__, type(dataset), params)
+        _cache_key = cache_get_key(fn.__name__, type(dataset).__name__, params)
         result = cache.get(_cache_key)
         if result is None:
             result = fn(dataset, params)

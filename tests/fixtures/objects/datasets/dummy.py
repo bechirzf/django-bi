@@ -7,7 +7,7 @@ from bi.models.dataset import BaseDataset
 
 
 class DummyDataset(BaseDataset):
-    @cache_dataframe
+    @cache_dataframe(100)
     def get_dataframe(self, params: Dict = None) -> pd.DataFrame:
         data = dict([('x_axis',
                       ['2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18',

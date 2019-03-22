@@ -7,8 +7,10 @@ from django.http import JsonResponse
 from django.http import QueryDict
 from django.urls import reverse
 
+from bi.models.object import BaseObject
 
-class BaseReport(ABC):
+
+class BaseReport(BaseObject, ABC):
     """Base abstract class for all reports.
 
     Attributes:
@@ -22,6 +24,7 @@ class BaseReport(ABC):
         Args:
             params: Report parameters.
         """
+        super().__init__()
         self.params = params
 
     @property

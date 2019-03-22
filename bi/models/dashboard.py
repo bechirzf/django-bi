@@ -5,11 +5,10 @@ from django.forms import Form
 from django.http import QueryDict
 
 from bi.lib import get_class_by_path
+from bi.models.object import BaseObject
 
 
-# TODO: make BaseObject class
-
-class BaseDashboard(ABC):
+class BaseDashboard(BaseObject, ABC):
     """Base abstract class for all dashboards.
 
     Attributes:
@@ -24,6 +23,7 @@ class BaseDashboard(ABC):
         Args:
             params: Dashboard parameters.
         """
+        super().__init__()
         self.params = params
 
     @property

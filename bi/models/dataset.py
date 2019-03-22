@@ -3,8 +3,10 @@ from typing import Dict
 
 import pandas as pd
 
+from bi.models.object import BaseObject
 
-class BaseDataset(ABC):
+
+class BaseDataset(BaseObject, ABC):
     """Base abstract class for all datasets.
     """
 

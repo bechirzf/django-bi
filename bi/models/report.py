@@ -11,10 +11,10 @@ class BaseReport(ABC):
     """Base abstract class for all reports.
 
     Attributes:
-        _params: Report parameters.
+        params: Report parameters.
     """
     # TODO: make abstract method get_data
-    _params: Dict
+    params: Dict
 
     def __init__(self, params: Dict) -> None:
         """Inits Report.
@@ -22,7 +22,7 @@ class BaseReport(ABC):
         Args:
             params: Report parameters.
         """
-        self._params = params
+        self.params = params
 
     @property
     def id(self) -> Text:
@@ -93,7 +93,7 @@ class BaseReport(ABC):
         if self.has_form():
             params = QueryDict(mutable=True)
             params.update(self.form_defaults)
-            params.update(self._params)
+            params.update(self.params)
 
             form = self.form_class(params)
             form.is_valid()
@@ -115,4 +115,4 @@ class BaseReport(ABC):
             A string with url.
         """
         # TODO: improve with format
-        return reverse('bi:report-detail-raw', args=[self.id]) + '?' + urllib.parse.urlencode(self._params)
+        return reverse('bi:report-detail-raw', args=[self.id]) + '?' + urllib.parse.urlencode(self.params)

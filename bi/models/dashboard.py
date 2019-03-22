@@ -18,7 +18,6 @@ class BaseDashboard(ABC):
 
     _params: Dict
 
-    # TODO: check params necessity
     def __init__(self, params: Dict):
         """Inits dashboard.
 

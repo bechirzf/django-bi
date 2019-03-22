@@ -16,7 +16,7 @@ class BaseDashboard(ABC):
         params: Dashboard parameters.
     """
 
-    _params: Dict
+    params: Dict
 
     def __init__(self, params: Dict):
         """Inits dashboard.
@@ -24,7 +24,7 @@ class BaseDashboard(ABC):
         Args:
             params: Dashboard parameters.
         """
-        self._params = params
+        self.params = params
 
     @property
     def id(self) -> Text:
@@ -111,7 +111,7 @@ class BaseDashboard(ABC):
         if self.has_form():
             params = QueryDict(mutable=True)
             params.update(self.form_defaults)
-            params.update(self._params)
+            params.update(self.params)
 
             form = self.form_class(params)
             form.is_valid()

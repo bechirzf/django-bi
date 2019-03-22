@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Type, Text, Union, Optional
 
 from django.forms import Form
+from django.http import JsonResponse
 from django.http import QueryDict
 from django.urls import reverse
 
@@ -13,7 +14,6 @@ class BaseReport(ABC):
     Attributes:
         params: Report parameters.
     """
-    # TODO: make abstract method get_data
     params: Dict
 
     def __init__(self, params: Dict) -> None:
@@ -116,3 +116,12 @@ class BaseReport(ABC):
         """
         # TODO: improve with format
         return reverse('bi:report-detail-raw', args=[self.id]) + '?' + urllib.parse.urlencode(self.params)
+
+    @abstractmethod
+    def get_data(self) -> JsonResponse:
+        """Returns data for report ajax.
+
+        Returns:
+            JSON response with report data
+        """
+        pass

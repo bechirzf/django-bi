@@ -1,9 +1,9 @@
-from django.http import QueryDict
 from django.test import TestCase
 from django.urls import reverse
 
 from bi.templatetags.gravatar import gravatar_url, gravatar
 from tests.fixtures.objects.reports.dummy1 import Report as DummyReport1
+from tests.fixtures.objects.reports.dummy2 import Report as DummyReport2
 
 
 class TemplateTagsTests(TestCase):
@@ -21,4 +21,5 @@ class TemplateTagsTests(TestCase):
 
     def test_report(self):
         response = self.client.get(reverse('bi:dashboard-detail', args=('dummy1',)))
-        self.assertTemplateUsed(response, DummyReport1(QueryDict()).template)
+        self.assertTemplateUsed(response, DummyReport1({}).template)
+        self.assertTemplateUsed(response, DummyReport2({'param1': 'abc', 'param2': 123}).template)

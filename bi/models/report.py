@@ -1,3 +1,4 @@
+import urllib
 from abc import ABC, abstractmethod
 from typing import Dict, Type, Text, Union, Optional
 
@@ -12,9 +13,10 @@ class BaseReport(ABC):
     Attributes:
         _params: Report parameters.
     """
-    _params: QueryDict
+    # TODO: make abstract method get_data
+    _params: Dict
 
-    def __init__(self, params: QueryDict) -> None:
+    def __init__(self, params: Dict) -> None:
         """Inits Report.
 
         Args:
@@ -112,4 +114,5 @@ class BaseReport(ABC):
         Returns:
             A string with url.
         """
-        return reverse('bi:report-detail-raw', args=[self.id]) + '?' + self._params.urlencode()
+        # TODO: improve with format
+        return reverse('bi:report-detail-raw', args=[self.id]) + '?' + urllib.parse.urlencode(self._params)

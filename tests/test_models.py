@@ -1,4 +1,3 @@
-from django.http import QueryDict
 from django.test import TestCase
 
 from bi.lib import get_entity_by_path, get_class_by_path
@@ -29,19 +28,22 @@ class DashboardTests(TestCase):
 
 class ReportTests(TestCase):
     def test_id(self):
-        dr1 = DummyReport1(QueryDict())
+        dr1 = DummyReport1({})
         self.assertEqual(dr1.id, 'dummy1')
 
     def test_template(self):
-        dr1 = DummyReport1(QueryDict())
+        dr1 = DummyReport1({})
         self.assertEqual(dr1.template, 'reports/dummy1.html')
-        dr3 = DummyReport3(QueryDict())
+        dr3 = DummyReport3({})
         self.assertEqual(dr3.template, 'reports/dummy/dummy3.html')
 
     def test_container_id(self):
-        dr1 = DummyReport1(QueryDict())
+        dr1 = DummyReport1({})
         self.assertEqual(dr1.container_id, 'dummy1_report')
 
     def test_get_raw_view_url(self):
-        dr1 = DummyReport1(QueryDict())
+        dr1 = DummyReport1({})
         self.assertEqual(dr1.get_raw_view_url(), '/reports/dummy1/raw/?')
+
+        dr1 = DummyReport1({'param1': 123, 'param2': 'abc'})
+        self.assertEqual(dr1.get_raw_view_url(), '/reports/dummy1/raw/?param1=123&param2=abc')

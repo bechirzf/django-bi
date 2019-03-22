@@ -16,10 +16,10 @@ class BaseDashboard(ABC):
         params: Dashboard parameters.
     """
 
-    _params: QueryDict
+    _params: Dict
 
     # TODO: check params necessity
-    def __init__(self, params: QueryDict):
+    def __init__(self, params: Dict):
         """Inits dashboard.
 
         Args:

@@ -1,6 +1,6 @@
-import urllib
 from abc import ABC, abstractmethod
 from typing import Dict, Type, Text, Union, Optional
+from urllib.parse import urlencode
 
 from django.forms import Form
 from django.http import JsonResponse
@@ -72,7 +72,7 @@ class BaseReport(ABC):
         Returns:
             A string with path to report template.
         """
-        # TODO: rework!!11111
+        # TODO: ¯\_(ツ)_/¯
         return '/'.join(self.__module__.split('.')[self.__module__.split('.').index('reports'):]) + '.html'
 
     @property
@@ -114,14 +114,13 @@ class BaseReport(ABC):
         Returns:
             A string with url.
         """
-        # TODO: improve with format
-        return reverse('bi:report-detail-raw', args=[self.id]) + '?' + urllib.parse.urlencode(self.params)
+        return "{}?{}".format(reverse('bi:report-detail-raw', args=[self.id]), urlencode(self.params))
 
     @abstractmethod
     def get_data(self) -> JsonResponse:
         """Returns data for report ajax.
 
         Returns:
-            JSON response with report data
+            JSON response with report data.
         """
         pass

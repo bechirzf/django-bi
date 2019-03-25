@@ -3,6 +3,7 @@ from typing import Union, Dict, Type, Text, Optional
 
 from django.forms import Form
 from django.http import QueryDict
+from django.urls import reverse
 
 from bi.lib import get_class_by_path
 from bi.models.object import BaseObject
@@ -92,6 +93,28 @@ class BaseDashboard(BaseObject, ABC):
             return module_splitted[-2]
 
     @classmethod
+    def has_parent_dashboard(cls) -> bool:
+        """Returns True if dashboard has parent dashboard.
+
+        Returns:
+            True of False.
+        """
+        module_splitted = cls.__module__.split('.')
+        return module_splitted[-2] != 'dashboards'
+
+    @classmethod
+    def get_parent_dashboard_url(cls) -> Union[Text, None]:
+        """Returns url of parent dashboard.
+
+        Returns:
+            URL of dashboard's parent or None.
+        """
+        if cls.has_parent_dashboard():
+            return reverse('bi:dashboard-detail', args=[cls.get_parent_dashboard_id()])
+        else:
+            return None
+
+    @classmethod
     def get_parent_dashboard_class(cls) -> Union[Text, None]:
         """Returns class of dashboard's parent.
 
@@ -101,6 +124,17 @@ class BaseDashboard(BaseObject, ABC):
         module_splitted = cls.__module__.split('.')
         temp_path = '/'.join(module_splitted[:-1]) + '.py'
         return get_class_by_path(temp_path, 'Dashboard')
+
+    @classmethod
+    def get_parent_dashboard(cls):
+        """Returns class of dashboard's parent.
+
+        Returns:
+            Class of dashboard's parent.
+        """
+        module_splitted = cls.__module__.split('.')
+        temp_path = '/'.join(module_splitted[:-1]) + '.py'
+        return get_class_by_path(temp_path, 'Dashboard')({})
 
     def get_form(self) -> Optional[Type[Form]]:
         """Returns form instance.

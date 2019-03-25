@@ -37,5 +37,8 @@ class DashboardsViewTests(TestCase):
             '<li><a href="/"><i class="fa fa-home"></i></a></li>',
             str(response.content))
         self.assertInHTML(
+            '<li><a href="/dashboards/dummy1/">Dummy board 1</a></li>',
+            str(response.content))
+        self.assertInHTML(
             '<li class="active">Dummy board 3</li>',
             str(response.content))

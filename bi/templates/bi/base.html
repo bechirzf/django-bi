@@ -46,6 +46,11 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="/"><i class="fa fa-home"></i></a></li>
+                    {% if dashboard.has_parent_dashboard %}
+                        <li>
+                            <a href="{{ dashboard.get_parent_dashboard_url }}">{{ dashboard.get_parent_dashboard.title }}</a>
+                        </li>
+                    {% endif %}
                     <li class="active">{{ dashboard.title }}</li>
                 </ol>
             </section>

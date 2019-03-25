@@ -25,6 +25,22 @@ class DashboardTests(TestCase):
         dummy_board1 = get_class_by_path('dashboards/dummy1.py', 'Dashboard')
         self.assertEqual(str(dummy_board3.get_parent_dashboard_class()), str(dummy_board1))
 
+    def test_get_parent_dashboard(self):
+        dummy_board3_class = get_class_by_path('dashboards/dummy1/dummy3.py', 'Dashboard')
+        self.assertEqual(str(type(dummy_board3_class.get_parent_dashboard())), "<class 'dashboards.dummy1.Dashboard'>")
+
+    def test_has_parent_dashboard(self):
+        dummy_board1 = get_class_by_path('dashboards/dummy1.py', 'Dashboard')
+        self.assertFalse(dummy_board1.has_parent_dashboard())
+        dummy_board3 = get_class_by_path('dashboards/dummy1/dummy3.py', 'Dashboard')
+        self.assertTrue(dummy_board3.has_parent_dashboard())
+
+    def test_get_parent_dashboard_url(self):
+        dummy_board1 = get_class_by_path('dashboards/dummy1.py', 'Dashboard')
+        self.assertIsNone(dummy_board1.get_parent_dashboard_url())
+        dummy_board3 = get_class_by_path('dashboards/dummy1/dummy3.py', 'Dashboard')
+        self.assertEqual(dummy_board3.get_parent_dashboard_url(), '/dashboards/dummy1/')
+
 
 class ReportTests(TestCase):
     def test_id(self):

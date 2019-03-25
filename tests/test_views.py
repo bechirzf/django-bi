@@ -24,21 +24,11 @@ class DashboardsViewTests(TestCase):
         response = self.client.get(reverse('bi:dashboard-detail', args=('dummy1',)))
         # TODO: add all breadcrumbs (now doesn't work)
         # self.assertInHTML('<ol class="breadcrumb"><li><a href="/"><i class="fa fa-home"></i></a></li><li class="active">Dummy board 1</li></ol>', str(response.content))
-        self.assertInHTML(
-            '<li><a href="/"><i class="fa fa-home"></i></a></li>',
-            str(response.content))
-        self.assertInHTML(
-            '<li class="active">Dummy board 1</li>',
-            str(response.content))
+        self.assertInHTML('<li><a href="/"><i class="fa fa-home"></i></a></li>', str(response.content))
+        self.assertInHTML('<li class="active">Dummy board 1</li>', str(response.content))
 
     def test_breadcrumbs_second_level(self):
         response = self.client.get(reverse('bi:dashboard-detail-nested', args=('dummy1', 'dummy3',)))
-        self.assertInHTML(
-            '<li><a href="/"><i class="fa fa-home"></i></a></li>',
-            str(response.content))
-        self.assertInHTML(
-            '<li><a href="/dashboards/dummy1/">Dummy board 1</a></li>',
-            str(response.content))
-        self.assertInHTML(
-            '<li class="active">Dummy board 3</li>',
-            str(response.content))
+        self.assertInHTML('<li><a href="/"><i class="fa fa-home"></i></a></li>', str(response.content))
+        self.assertInHTML('<li><a href="/dashboards/dummy1/">Dummy board 1</a></li>', str(response.content))
+        self.assertInHTML('<li class="active">Dummy board 3</li>', str(response.content))

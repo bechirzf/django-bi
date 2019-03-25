@@ -21,10 +21,10 @@
                 <a href="{% url 'bi:dashboard-detail' dashboard.0 %}">
                     <i class="{{ dashboard.2 }}"></i>
                     <span onclick="event.stopPropagation()">{{ dashboard.1 }}</span>
-                    {% if  nested_dashboards %}
+                    {% if nested_dashboards %}
                         <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     {% endif %}
                 </a>
                 <ul class="treeview-menu">

@@ -77,7 +77,7 @@ class BaseReport(BaseObject, ABC):
             A string with path to report template.
         """
         # TODO: ¯\_(ツ)_/¯
-        return os.sep.join(self.__module__.split('.')[self.__module__.split('.').index('reports'):]) + '.html'
+        return os.path.join(*self.__module__.split('.')[self.__module__.split('.').index('reports'):]) + '.html'
 
     @property
     def container_id(self) -> Text:

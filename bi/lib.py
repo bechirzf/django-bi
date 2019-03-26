@@ -1,6 +1,6 @@
 import glob
 import hashlib
-import os
+import os.path
 from importlib.util import spec_from_file_location, module_from_spec
 from typing import List, Tuple, Type, Union, Dict, Text, TYPE_CHECKING
 

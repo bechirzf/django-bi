@@ -1,7 +1,15 @@
 language: python
 python:
   - "3.6"
-
+matrix:
+  include:
+    - os: windows
+      language: sh
+      python: "3.7"
+      before_install:
+        - choco install python3
+        - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+        - python -m pip install --upgrade pip wheel
 deploy:
   provider: pypi
   user: zhelyabuzhsky
@@ -9,9 +17,7 @@ deploy:
     secure: qAxvUrCEG76aMsBJN+7FxonZEzBnQVBUTBmZrHrn0bCfIZl/XQk4QC+CLi2Ok0VN802eLBRcsVp9l+0eRRSR2im5NPx5x81MAcfKlgNwv9HTYhdJmSWOAxqusBb9c2Q24rZjEmaeqkrt/pgwaAy4A3MGyyfTW0poeS6BZg4q9nEXny3REl29AL+bIvjCDBp88Sfs//sqP+JLl+Unu+7wMxRvLOZ9S4DxJ6C6cwVFARejC0JstFR378DRccCYfQawIgIXhgyblbDP4g687xvyWqiWsEGBoXvb6Tj2CpVWGYyn2pHAoUpAxvO6yR/rJqrOW6da7Lc68AcBMgNJu8cqv/a/yyHwnvJKaCn7vz0isg3nH3gYKmiHgssKJTzIKiKbh4zmQ6L+T/en4uhE6YGzQCSOpvbUk+QadxAko5sZ1MfQ80U4UpkBthakc8l0I1re1aqsZnvKR+47rcrV7eR9+Kfa4Ixc6Bw5s+6DWQXkNQBMMA51dn2q9Q0PGFL8+yM8vFqKbHe3kh/RlpiGVEO7+prJAeD9Bt/QGWOFEQAWHcrq1lgBX8MIriADUAh0bxenT0b+D0+llxaHI9VPINDb1umRO41q5p9p+X5Ot008yETMiGOB/DTX5XohbbpD5RItWBKjY6HIjRDAEWe+VbHCax0lQfaqOmVX5VsijsHneD0=
   on:
     tags: true
-
 install:
   - pip install -r requirements.txt
-
 script:
   - python setup.py test

@@ -56,9 +56,9 @@ def get_class_by_path(path: Text, class_name: Text) -> Union[Type[BaseReport], T
         Dashboard or Report.
     """
     try:
-        splitted_path = path[:-3].split(os.sep)
+        splitted_path = os.path.splitext(path)[0].split(os.sep)
         cls_path = '.'.join(splitted_path)
-        spec = spec_from_file_location(cls_path, settings.OBJECTS_PATH + os.sep + path)
+        spec = spec_from_file_location(cls_path, os.path.join(settings.OBJECTS_PATH, path))
         module = module_from_spec(spec)
         spec.loader.exec_module(module)
 

@@ -37,7 +37,7 @@ LANGUAGES = (
 
 MIDDLEWARE_CLASSES = ()
 
-OBJECTS_PATH = 'tests' + os.sep + 'fixtures' + os.sep + 'objects'
+OBJECTS_PATH = os.path.join('tests', 'fixtures', 'objects')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

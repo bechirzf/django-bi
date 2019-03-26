@@ -3,17 +3,16 @@
 {% block content %}
 
     {% if form.errors %}
-        <p>Нет пользователя с таким именем пользователя и паролем.</p>
+        <p>There are no user with this username or password.</p>
     {% endif %}
 
     {% if next %}
         {% if user.is_authenticated %}
             <p>
-                Ваш пользователь не имеет прав на просмотр этой страницы.
-                Чтобы продолжить, войдите под пользователем, у которого есть соответствующие права.
+                You are authenticated, but are not authorized to access this page.
             </p>
         {% else %}
-            <p>Пожалуйста, залогиньтесь, чтобы увидеть эту страницу.</p>
+            <p>Please log in to see this page.</p>
         {% endif %}
     {% endif %}
 

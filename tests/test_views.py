@@ -1,26 +1,34 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
 
 class DashboardsViewTests(TestCase):
+    def setUp(self):
+        get_user_model().objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
+
     def test_dashboard_home(self):
+        self.client.login(username='temporary', password='temporary')
         response = self.client.get(reverse('bi:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '70% Increase in 30 Days')
 
     def test_dashboard_detail(self):
+        self.client.login(username='temporary', password='temporary')
         response = self.client.get(reverse('bi:dashboard-detail', args=('dummy1',)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Dummy report 1')
         self.assertContains(response, 'Dummy report 2')
 
     def test_dashboard_detail_nested(self):
+        self.client.login(username='temporary', password='temporary')
         response = self.client.get(reverse('bi:dashboard-detail-nested', args=('dummy1', 'dummy3',)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Dummy report 1')
         self.assertContains(response, 'Dummy report 2')
 
     def test_breadcrumbs_first_level(self):
+        self.client.login(username='temporary', password='temporary')
         response = self.client.get(reverse('bi:dashboard-detail', args=('dummy1',)))
         self.assertContains(
             response,
@@ -29,6 +37,7 @@ class DashboardsViewTests(TestCase):
         )
 
     def test_breadcrumbs_second_level(self):
+        self.client.login(username='temporary', password='temporary')
         response = self.client.get(reverse('bi:dashboard-detail-nested', args=('dummy1', 'dummy3',)))
         self.assertContains(
             response,

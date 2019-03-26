@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -7,6 +8,9 @@ from tests.fixtures.objects.reports.dummy2 import Report as DummyReport2
 
 
 class TemplateTagsTests(TestCase):
+    def setUp(self):
+        get_user_model().objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
+
     def test_gravatar_url(self):
         self.assertEqual(
             gravatar_url('zhelyabuzhsky@icloud.com', 160),
@@ -20,6 +24,7 @@ class TemplateTagsTests(TestCase):
         )
 
     def test_report(self):
-        response = self.client.get(reverse('bi:dashboard-detail', args=('dummy1',)))
+        self.client.login(username='temporary', password='temporary')
+        response = self.client.get(reverse('bi:dashboard-detail', args=('dummy1',)), follow=True)
         self.assertTemplateUsed(response, DummyReport1({}).template)
         self.assertTemplateUsed(response, DummyReport2({'param1': 'abc', 'param2': 123}).template)

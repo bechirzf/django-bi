@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 from typing import Union, Dict, Type, Text, Optional
 
@@ -122,7 +123,7 @@ class BaseDashboard(BaseObject, ABC):
             Class of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        temp_path = '/'.join(module_splitted[:-1]) + '.py'
+        temp_path = os.sep.join(module_splitted[:-1]) + '.py'
         return get_class_by_path(temp_path, 'Dashboard')
 
     @classmethod
@@ -133,7 +134,7 @@ class BaseDashboard(BaseObject, ABC):
             Class of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        temp_path = '/'.join(module_splitted[:-1]) + '.py'
+        temp_path = os.sep.join(module_splitted[:-1]) + '.py'
         return get_class_by_path(temp_path, 'Dashboard')({})
 
     def get_form(self) -> Optional[Type[Form]]:

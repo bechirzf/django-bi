@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 from typing import Dict, Type, Text, Union, Optional
 from urllib.parse import urlencode
@@ -76,7 +77,7 @@ class BaseReport(BaseObject, ABC):
             A string with path to report template.
         """
         # TODO: ¯\_(ツ)_/¯
-        return '/'.join(self.__module__.split('.')[self.__module__.split('.').index('reports'):]) + '.html'
+        return os.sep.join(self.__module__.split('.')[self.__module__.split('.').index('reports'):]) + '.html'
 
     @property
     def container_id(self) -> Text:

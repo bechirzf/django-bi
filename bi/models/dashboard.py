@@ -76,9 +76,9 @@ class BaseDashboard(BaseObject, ABC):
             A string with path to template of dashboard.
         """
         if self.get_parent_dashboard_id():
-            return 'dashboards/{}/{}.html'.format(self.get_parent_dashboard_id(), self.id)
+            return os.path.join('dashboards', self.get_parent_dashboard_id(), self.id) + '.html'
         else:
-            return 'dashboards/{}.html'.format(self.id)
+            return os.path.join('dashboards', self.id) + '.html'
 
     @classmethod
     def get_parent_dashboard_id(cls) -> Union[Text, None]:

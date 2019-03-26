@@ -1,6 +1,6 @@
 import glob
 import hashlib
-import os
+import os.path
 from importlib.util import spec_from_file_location, module_from_spec
 from typing import List, Tuple, Type, Union, Dict, Text, TYPE_CHECKING
 
@@ -56,9 +56,8 @@ def get_class_by_path(path: Text, class_name: Text) -> Union[Type[BaseReport], T
         Dashboard or Report.
     """
     try:
-        splitted_path = path[:-3].split('/')
-        cls_path = '.'.join(splitted_path)
-        spec = spec_from_file_location(cls_path, settings.OBJECTS_PATH + '/' + path)
+        cls_path = '.'.join(os.path.splitext(os.path.normcase(path))[0].split(os.sep))
+        spec = spec_from_file_location(cls_path, os.path.join(settings.OBJECTS_PATH, path))
         module = module_from_spec(spec)
         spec.loader.exec_module(module)
 
@@ -79,7 +78,7 @@ def get_reports_list() -> List[Union[BaseReport, None]]:
     files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'reports', '**', '[!_]*.py'), recursive=True)
     files = list(files)
     for file in sorted(files):
-        file = os.path.relpath(file, settings.OBJECTS_PATH + '/')
+        file = os.path.relpath(file, settings.OBJECTS_PATH + os.sep)
         report = get_entity_by_path(file, 'Report')
         reports_list.append(report)
     return reports_list
@@ -95,11 +94,11 @@ def get_dashboards_hierarchy() -> Dict[Type['BaseDashboard'], List[Type['BaseDas
     files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'dashboards', '**', '[!_]*.py'), recursive=True)
     files = list(files)
     for file in sorted(files):
-        file = os.path.relpath(file, settings.OBJECTS_PATH + '/')
+        file = os.path.relpath(file, settings.OBJECTS_PATH + os.sep)
         cls = get_class_by_path(file, 'Dashboard')
-        if str(cls) not in [str(key) for key in dashboards_hierarchy.keys()] and len(file.split('/')) == 2:
+        if str(cls) not in [str(key) for key in dashboards_hierarchy.keys()] and len(file.split(os.sep)) == 2:
             dashboards_hierarchy[cls] = []
-        if len(file.split('/')) == 3:
+        if len(file.split(os.sep)) == 3:
             if str(cls.get_parent_dashboard_class()) not in [str(key) for key in dashboards_hierarchy.keys()]:
                 dashboards_hierarchy[cls.get_parent_dashboard_class()] = [cls]
             else:

@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 from typing import Union, Dict, Type, Text, Optional
 
@@ -75,9 +76,9 @@ class BaseDashboard(BaseObject, ABC):
             A string with path to template of dashboard.
         """
         if self.get_parent_dashboard_id():
-            return 'dashboards/{}/{}.html'.format(self.get_parent_dashboard_id(), self.id)
+            return os.path.join('dashboards', self.get_parent_dashboard_id(), self.id) + '.html'
         else:
-            return 'dashboards/{}.html'.format(self.id)
+            return os.path.join('dashboards', self.id) + '.html'
 
     @classmethod
     def get_parent_dashboard_id(cls) -> Union[Text, None]:
@@ -122,8 +123,7 @@ class BaseDashboard(BaseObject, ABC):
             Class of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        temp_path = '/'.join(module_splitted[:-1]) + '.py'
-        return get_class_by_path(temp_path, 'Dashboard')
+        return get_class_by_path(os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')
 
     @classmethod
     def get_parent_dashboard(cls):
@@ -133,8 +133,7 @@ class BaseDashboard(BaseObject, ABC):
             Class of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        temp_path = '/'.join(module_splitted[:-1]) + '.py'
-        return get_class_by_path(temp_path, 'Dashboard')({})
+        return get_class_by_path(os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')({})
 
     def get_form(self) -> Optional[Type[Form]]:
         """Returns form instance.

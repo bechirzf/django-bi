@@ -1,4 +1,4 @@
-import os
+import os.path
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -37,7 +37,7 @@ LANGUAGES = (
 
 MIDDLEWARE_CLASSES = ()
 
-OBJECTS_PATH = 'tests/fixtures/objects'
+OBJECTS_PATH = os.path.join('tests', 'fixtures', 'objects')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

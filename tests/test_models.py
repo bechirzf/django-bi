@@ -1,3 +1,5 @@
+from os.path import normcase
+
 from django.test import TestCase
 
 from bi.lib import get_entity_by_path, get_class_by_path
@@ -12,7 +14,7 @@ class DashboardTests(TestCase):
 
     def test_template(self):
         board = get_entity_by_path('dashboards/dummy1.py', 'Dashboard', {})
-        self.assertEqual(board.template, 'dashboards/dummy1.html')
+        self.assertEqual(board.template, normcase('dashboards/dummy1.html'))
 
     def test_get_parent_dashboard_id(self):
         board = get_entity_by_path('dashboards/dummy1.py', 'Dashboard', {})
@@ -49,9 +51,9 @@ class ReportTests(TestCase):
 
     def test_template(self):
         dr1 = DummyReport1({})
-        self.assertEqual(dr1.template, 'reports/dummy1.html')
+        self.assertEqual(dr1.template, normcase('reports/dummy1.html'))
         dr3 = DummyReport3({})
-        self.assertEqual(dr3.template, 'reports/dummy/dummy3.html')
+        self.assertEqual(dr3.template, normcase('reports/dummy/dummy3.html'))
 
     def test_container_id(self):
         dr1 = DummyReport1({})

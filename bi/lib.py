@@ -182,7 +182,7 @@ def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60):
             return key
 
         def memoized_func(*args):
-            _cache_key = cache_get_key(fn.__name__, type(args[0]).__name__, args[1:])
+            _cache_key = cache_get_key(fn.__name__, type(args[0]), args[1:])
             result = cache.get(_cache_key)
             if result is None:
                 result = fn(*args)

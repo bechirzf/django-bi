@@ -2,7 +2,7 @@ from django.http import JsonResponse
 
 from bi.lib import transform_python_list_to_list_for_echarts
 from bi.models.report import BaseReport
-from tests.fixtures.objects.datasets.dummy import DummyDataset
+from tests.fixtures.objects.datasets.dummy import Dataset
 
 
 class Report(BaseReport):
@@ -13,7 +13,7 @@ class Report(BaseReport):
     description = 'Dummy report 1 для примера и тестов'
 
     def get_data(self) -> JsonResponse:
-        dataset = DummyDataset()
+        dataset = Dataset()
         data = dataset.get_dataframe()
 
         x_axis = data['x_axis'].values.tolist()

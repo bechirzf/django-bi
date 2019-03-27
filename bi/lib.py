@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.http import QueryDict
 
+from bi.models.dataset import BaseDataset
 from bi.models.report import BaseReport
 
 if TYPE_CHECKING:
@@ -82,6 +83,22 @@ def get_reports_list() -> List[Union[BaseReport, None]]:
         report = get_entity_by_path(file, 'Report')
         reports_list.append(report)
     return reports_list
+
+
+def get_datasets_list() -> List[Union[BaseDataset, None]]:
+    """Get list of datasets instances.
+
+    Returns:
+        List of datasets instances.
+    """
+    datasets_list = []
+    files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'datasets', '**', '[!_]*.py'), recursive=True)
+    files = list(files)
+    for file in sorted(files):
+        file = os.path.relpath(file, settings.OBJECTS_PATH + os.sep)
+        report = get_entity_by_path(file, 'Dataset')
+        datasets_list.append(report)
+    return datasets_list
 
 
 def get_dashboards_hierarchy() -> Dict[Type['BaseDashboard'], List[Type['BaseDashboard']]]:

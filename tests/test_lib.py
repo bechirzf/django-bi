@@ -87,9 +87,9 @@ class LibTests(TestCase):
     def test_cache_dataframe_decorator(self):
         cache.clear()
         dds = Dataset()
-        self.assertIsNone(cache.get("8ec7218ddb54d4b556f302af4fd4b079"))
+        self.assertIsNone(cache.get("20f180e978ce3b67ca2e7afd8a880385"))
         dds.get_dataframe()
-        self.assertIsNotNone(cache.get("8ec7218ddb54d4b556f302af4fd4b079"))
-        cache_time = cache._expire_info.get(cache.make_key("8ec7218ddb54d4b556f302af4fd4b079"))
+        self.assertIsNotNone(cache.get("20f180e978ce3b67ca2e7afd8a880385"))
+        cache_time = cache._expire_info.get(cache.make_key("20f180e978ce3b67ca2e7afd8a880385"))
         dds.get_dataframe()
-        self.assertEqual(cache._expire_info.get(cache.make_key("8ec7218ddb54d4b556f302af4fd4b079")), cache_time)
+        self.assertEqual(cache._expire_info.get(cache.make_key("20f180e978ce3b67ca2e7afd8a880385")), cache_time)

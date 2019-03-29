@@ -32,7 +32,7 @@ class PyTest(TestCommand):
 
 setup(
     name='django-bi',
-    version='1.0.22',
+    version='1.0.23',
     packages=find_packages(exclude=['tests*']),
     include_package_data=True,
     license='GPLv3 License',

@@ -126,11 +126,11 @@ class BaseDashboard(BaseObject, ABC):
         return get_class_by_path(os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')
 
     @classmethod
-    def get_parent_dashboard(cls):
-        """Returns class of dashboard's parent.
+    def get_parent_dashboard(cls) -> 'BaseDashboard':
+        """Returns instance of dashboard's parent.
 
         Returns:
-            Class of dashboard's parent.
+            Instance of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
         return get_class_by_path(os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')({})

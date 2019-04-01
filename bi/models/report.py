@@ -6,7 +6,6 @@ from urllib.parse import urlencode
 from django.forms import Form
 from django.http import JsonResponse
 from django.http import QueryDict
-from django.urls import reverse
 
 from bi.models.object import BaseObject
 
@@ -112,13 +111,35 @@ class BaseReport(BaseObject, ABC):
         """
         return self.form_class is not None
 
-    def get_raw_view_url(self) -> Text:
-        """Returns URL for raw entry point.
+    def get_url_raw(self) -> Text:
+        """Returns URL for reports raw data.
 
         Returns:
             A string with url.
         """
-        return "{}?{}".format(reverse('bi:report-detail-raw', args=[self.id]), urlencode(self.params))
+        if self.params:
+            return "{}raw/?{}".format(self.get_url_simple(), urlencode(self.params))
+        else:
+            return "{}raw/".format(self.get_url_simple())
+
+    def get_url(self) -> Text:
+        """Returns URL for report.
+
+        Returns:
+            A string with url.
+        """
+        if self.params:
+            return '{}?{}'.format(self.get_url_simple(), urlencode(self.params))
+        else:
+            return '{}'.format(self.get_url_simple())
+
+    def get_url_simple(self) -> Text:
+        """Returns URL for report without params.
+
+        Returns:
+            A string with url.
+        """
+        return '/{}/'.format(os.path.join(*self.__module__.split('.')[self.__module__.split('.').index('reports'):]))
 
     @abstractmethod
     def get_data(self) -> JsonResponse:

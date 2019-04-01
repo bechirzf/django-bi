@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -8,10 +8,10 @@ urlpatterns = [
     path('', views.index, name='index'),
     # example: /reports/
     path('reports/', views.report_list, name='report-list'),
-    # example: /reports/Dummy/
-    path('reports/<report_id>/', views.report_detail, name='report-detail'),
     # example: /reports/Dummy/raw/
-    path('reports/<report_id>/raw/', views.report_detail_raw, name='report-detail-raw'),
+    re_path(r'reports/(?P<report_path>.+)/raw/$', views.report_detail_raw, name='report-detail-raw'),
+    # example: /reports/Dummy/
+    re_path(r'reports/(?P<report_path>.+)/$', views.report_detail, name='report-detail'),
     # example: /dashboards/Dummy/
     path('dashboards/<dashboard_id>/', views.dashboard_detail, name='dashboard-detail'),
     # example: /dashboards/Dummy/DummyReport1/

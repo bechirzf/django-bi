@@ -59,9 +59,19 @@ class ReportTests(TestCase):
         dr1 = DummyReport1({})
         self.assertEqual(dr1.container_id, 'dummy1_report')
 
-    def test_get_raw_view_url(self):
+    def test_get_url_raw(self):
         dr1 = DummyReport1({})
-        self.assertEqual(dr1.get_raw_view_url(), '/reports/dummy1/raw/?')
+        self.assertEqual(dr1.get_url_raw(), '/reports/dummy1/raw/')
 
         dr1 = DummyReport1({'param1': 123, 'param2': 'abc'})
-        self.assertEqual(dr1.get_raw_view_url(), '/reports/dummy1/raw/?param1=123&param2=abc')
+        self.assertEqual(dr1.get_url_raw(), '/reports/dummy1/raw/?param1=123&param2=abc')
+
+    def test_get_url(self):
+        dr1 = DummyReport1({})
+        self.assertEqual(dr1.get_url(), '/reports/dummy1/')
+
+        dr1 = DummyReport1({'param1': 123, 'param2': 'abc'})
+        self.assertEqual(dr1.get_url(), '/reports/dummy1/?param1=123&param2=abc')
+
+        dr3 = DummyReport3({})
+        self.assertEqual(dr3.get_url(), '/reports/dummy/dummy3/')

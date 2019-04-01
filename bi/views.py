@@ -22,12 +22,12 @@ def report_list(request):
 
     context = {'report_list': reports}
 
-    return render(request, 'bi/list.html', context)
+    return render(request, 'bi/report_list.html', context)
 
 
 @login_required()
-def report_detail(request, report_id):
-    report = get_entity_by_path('reports/{}.py'.format(report_id), 'Report', request.GET)
+def report_detail(request, report_path):
+    report = get_entity_by_path('reports/{}.py'.format(report_path), 'Report', request.GET)
     if not report:
         raise Http404()
 
@@ -35,8 +35,8 @@ def report_detail(request, report_id):
 
 
 @login_required()
-def report_detail_raw(request, report_id):
-    report = get_entity_by_path('reports/{}.py'.format(report_id), 'Report', request.GET)
+def report_detail_raw(request, report_path):
+    report = get_entity_by_path('reports/{}.py'.format(report_path), 'Report', request.GET)
     if not report:
         raise Http404()
 

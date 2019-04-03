@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, List, Text
 
 import pandas as pd
 
@@ -32,3 +32,12 @@ class BaseDataset(BaseObject, ABC):
             Pandas dataframe.
         """
         pass
+
+    @classmethod
+    def get_cached_dataset_methods(cls) -> List[Text]:
+        """Return all methods cached with cache_dataframe decorator.
+
+        Returns:
+            List of methods.
+        """
+        return [name for name, value in vars(cls).items() if 'cache_dataframe' in str(value)]

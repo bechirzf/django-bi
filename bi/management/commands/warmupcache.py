@@ -11,5 +11,6 @@ class Command(BaseCommand):
         cache.clear()
         datasets = get_datasets_list()
         for dataset in datasets:
-            dataset.get_dataframe()
+            for method in type(dataset).get_cached_dataset_methods():
+                getattr(dataset, method)()
         self.stdout.write(self.style.SUCCESS('Cache was successfully warmed up'))

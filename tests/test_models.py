@@ -3,6 +3,7 @@ from os.path import normcase
 from django.test import TestCase
 
 from bi.lib import get_entity_by_path, get_class_by_path
+from tests.fixtures.objects.datasets.dummy import Dataset as DummyDataset
 from tests.fixtures.objects.reports.dummy.dummy3 import Report as DummyReport3
 from tests.fixtures.objects.reports.dummy1 import Report as DummyReport1
 
@@ -75,3 +76,8 @@ class ReportTests(TestCase):
 
         dr3 = DummyReport3({})
         self.assertEqual(dr3.get_url(), '/reports/dummy/dummy3/')
+
+
+class DatasetTests(TestCase):
+    def test_get_cached_methods(self):
+        self.assertEqual(DummyDataset.get_cached_dataset_methods(), ['get_dataframe'])

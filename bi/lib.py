@@ -182,7 +182,14 @@ def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60):
             return key
 
         def memoized_func(*args):
-            _cache_key = cache_get_key(str(type(args[0])).split('.')[-2], fn.__name__, args[1:])
+            # getting string for dataset's module name relative objects/datasets
+            splitted_module_name = str(type(args[0])).split('.')
+            if 'objects' in splitted_module_name:
+                splitted_module_name = splitted_module_name[splitted_module_name.index('datasets') + 1: -1]
+            else:
+                splitted_module_name = splitted_module_name[1: -1]
+            module_name = '.'.join(splitted_module_name)
+            _cache_key = cache_get_key(module_name, fn.__name__, args[1:])
             result = cache.get(_cache_key)
             if result is None:
                 result = fn(*args)

@@ -139,7 +139,9 @@ class BaseReport(BaseObject, ABC):
         Returns:
             A string with url.
         """
-        return '/{}/'.format(os.path.join(*self.__module__.split('.')[self.__module__.split('.').index('reports'):]))
+        return '/{}/'.format(
+            os.path.join(*self.__module__.split('.')[self.__module__.split('.').index('reports'):]).replace('\\', '/')
+        )
 
     @abstractmethod
     def get_data(self) -> JsonResponse:

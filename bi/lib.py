@@ -179,7 +179,7 @@ def get_dashboards_hierarchy_for_template() -> Dict:
     return dashboards_hierarchy_for_template
 
 
-def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60) -> Callable:
+def cache_dataframe(timeout: int = 1 * 7 * 24 * 60 * 60) -> Callable:
     """Decorator for caching dataframe in dataset's get_dataframe method.
 
     Args:

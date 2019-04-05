@@ -1,5 +1,6 @@
 import hashlib
 import urllib.parse
+from typing import Text
 
 from django import template
 from django.utils.safestring import mark_safe
@@ -8,7 +9,7 @@ register = template.Library()
 
 
 @register.filter
-def gravatar_url(email, size=40):
+def gravatar_url(email: Text, size: int = 40):
     """Returns url of gravatar.
 
     Usage example:
@@ -23,7 +24,7 @@ def gravatar_url(email, size=40):
 
 
 @register.filter
-def gravatar(email, size=40):
+def gravatar(email: Text, size: int = 40):
     """Returns image html tag with gravatar.
 
     Usage example:

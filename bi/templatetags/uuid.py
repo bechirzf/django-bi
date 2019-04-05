@@ -1,3 +1,4 @@
+from typing import Text
 from uuid import uuid4
 
 from django.template import Library, Node, TemplateSyntaxError
@@ -10,7 +11,7 @@ class UUIDNode(Node):
     Генерация UUID.
     """
 
-    def __init__(self, var_name):
+    def __init__(self, var_name: Text):
         self.var_name = var_name
 
     def render(self, context):

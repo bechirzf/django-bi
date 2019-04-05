@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Text
 
-import pandas as pd
+from pandas import DataFrame
 
 from bi.models.object import BaseObject
 
@@ -25,7 +25,7 @@ class BaseDataset(BaseObject, ABC):
         self.params = params
 
     @abstractmethod
-    def get_dataframe(self, params: Dict = None) -> pd.DataFrame:
+    def get_dataframe(self, params: Dict = None) -> DataFrame:
         """Returns x and y axes data (maybe several).
 
         Returns:

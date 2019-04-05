@@ -11,29 +11,23 @@ DATABASES = {
     }
 }
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'fixtures/objects')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'builtins': ['bi.templatetags.report'],
-        },
-    }
-]
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [os.path.join(BASE_DIR, 'fixtures/objects')],
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'builtins': ['bi.templatetags.report'],
+    },
+}]
 
 INSTALLED_APPS = [
-    'django.contrib.contenttypes',
-    'django.contrib.auth',
-    'django.contrib.sessions',
-    'bi'
+    'django.contrib.contenttypes', 'django.contrib.auth',
+    'django.contrib.sessions', 'bi'
 ]
 
 ROOT_URLCONF = 'tests.urls'
 
-LANGUAGES = (
-    ('en', 'English'),
-)
+LANGUAGES = (('en', 'English'),)
 
 MIDDLEWARE_CLASSES = ()
 

@@ -6,6 +6,7 @@ from django.test import TestCase
 
 
 class WarmupcacheTest(TestCase):
+
     def test_command_output(self):
         out = StringIO()
         call_command('warmupcache', stdout=out)

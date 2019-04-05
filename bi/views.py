@@ -9,7 +9,8 @@ from bi.lib import get_entity_by_path, get_reports_list
 
 @login_required()
 def index(request):
-    dashboard = get_entity_by_path('dashboards/{}.py'.format('home'), 'Dashboard', request.GET)
+    dashboard = get_entity_by_path('dashboards/{}.py'.format('home'),
+                                   'Dashboard', request.GET)
     if not dashboard:
         raise Http404()
 
@@ -27,7 +28,8 @@ def report_list(request):
 
 @login_required()
 def report_detail(request, report_path):
-    report = get_entity_by_path('reports/{}.py'.format(report_path), 'Report', request.GET)
+    report = get_entity_by_path('reports/{}.py'.format(report_path), 'Report',
+                                request.GET)
     if not report:
         raise Http404()
 
@@ -36,7 +38,8 @@ def report_detail(request, report_path):
 
 @login_required()
 def report_detail_raw(request, report_path):
-    report = get_entity_by_path('reports/{}.py'.format(report_path), 'Report', request.GET)
+    report = get_entity_by_path('reports/{}.py'.format(report_path), 'Report',
+                                request.GET)
     if not report:
         raise Http404()
 
@@ -45,7 +48,8 @@ def report_detail_raw(request, report_path):
 
 @login_required()
 def dashboard_detail(request, dashboard_id):
-    dashboard = get_entity_by_path('dashboards/{}.py'.format(dashboard_id), 'Dashboard', request.GET)
+    dashboard = get_entity_by_path('dashboards/{}.py'.format(dashboard_id),
+                                   'Dashboard', request.GET)
     if not dashboard:
         raise Http404()
 
@@ -55,7 +59,8 @@ def dashboard_detail(request, dashboard_id):
 @login_required()
 def dashboard_detail_nested(request, dashboard_id, dashboard_parent_id):
     dashboard = get_entity_by_path(
-        'dashboards/{}/{}.py'.format(dashboard_parent_id, dashboard_id), 'Dashboard', request.GET)
+        'dashboards/{}/{}.py'.format(dashboard_parent_id, dashboard_id),
+        'Dashboard', request.GET)
     if not dashboard:
         raise Http404()
 

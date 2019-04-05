@@ -29,7 +29,8 @@ def do_uuid(parser, token):
     try:
         tag_name, var_name = token.split_contents()
     except ValueError:
-        raise TemplateSyntaxError("%r tag requires exactly one argument" % token.contents.split()[0])
+        raise TemplateSyntaxError(
+            "%r tag requires exactly one argument" % token.contents.split()[0])
     return UUIDNode(var_name)
 
 

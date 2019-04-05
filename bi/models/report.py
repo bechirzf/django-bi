@@ -76,7 +76,8 @@ class BaseReport(BaseObject, ABC):
             A string with path to report template.
         """
         # TODO: ¯\_(ツ)_/¯
-        return os.path.join(*self.__module__.split('.')[self.__module__.split('.').index('reports'):]) + '.html'
+        return os.path.join(*self.__module__.split(
+            '.')[self.__module__.split('.').index('reports'):]) + '.html'
 
     @property
     def container_id(self) -> Text:
@@ -118,7 +119,8 @@ class BaseReport(BaseObject, ABC):
             A string with url.
         """
         if self.params:
-            return "{}raw/?{}".format(self.get_url_simple(), urlencode(self.params))
+            return "{}raw/?{}".format(self.get_url_simple(),
+                                      urlencode(self.params))
         else:
             return "{}raw/".format(self.get_url_simple())
 
@@ -140,8 +142,9 @@ class BaseReport(BaseObject, ABC):
             A string with url.
         """
         return '/{}/'.format(
-            os.path.join(*self.__module__.split('.')[self.__module__.split('.').index('reports'):]).replace('\\', '/')
-        )
+            os.path.join(*self.__module__.split(
+                '.')[self.__module__.split('.').index('reports'):]).replace(
+                '\\', '/'))
 
     @abstractmethod
     def get_data(self) -> JsonResponse:

@@ -40,4 +40,7 @@ class BaseDataset(BaseObject, ABC):
         Returns:
             List of methods.
         """
-        return [name for name, value in vars(cls).items() if 'cache_dataframe' in str(value)]
+        return [
+            name for name, value in vars(cls).items()
+            if 'cache_dataframe' in str(value)
+        ]

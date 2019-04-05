@@ -76,7 +76,8 @@ class BaseDashboard(BaseObject, ABC):
             A string with path to template of dashboard.
         """
         if self.get_parent_dashboard_id():
-            return os.path.join('dashboards', self.get_parent_dashboard_id(), self.id) + '.html'
+            return os.path.join('dashboards', self.get_parent_dashboard_id(),
+                                self.id) + '.html'
         else:
             return os.path.join('dashboards', self.id) + '.html'
 
@@ -111,7 +112,8 @@ class BaseDashboard(BaseObject, ABC):
             URL of dashboard's parent or None.
         """
         if cls.has_parent_dashboard():
-            return reverse('bi:dashboard-detail', args=[cls.get_parent_dashboard_id()])
+            return reverse(
+                'bi:dashboard-detail', args=[cls.get_parent_dashboard_id()])
         else:
             return None
 
@@ -123,7 +125,8 @@ class BaseDashboard(BaseObject, ABC):
             Class of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        return get_class_by_path(os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')
+        return get_class_by_path(
+            os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')
 
     @classmethod
     def get_parent_dashboard(cls) -> 'BaseDashboard':
@@ -133,7 +136,8 @@ class BaseDashboard(BaseObject, ABC):
             Instance of dashboard's parent.
         """
         module_splitted = cls.__module__.split('.')
-        return get_class_by_path(os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')({})
+        return get_class_by_path(
+            os.path.join(*module_splitted[:-1]) + '.py', 'Dashboard')({})
 
     def get_form(self) -> Optional[Type[Form]]:
         """Returns form instance.

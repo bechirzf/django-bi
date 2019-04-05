@@ -47,7 +47,8 @@ def get_entity_by_path(path: Text, class_name: Text, class_params: Dict = None) 
         return None
 
 
-def get_class_by_path(path: Text, class_name: Text) -> Union[Type[BaseReport], Type['BaseDashboard'], None]:
+def get_class_by_path(path: Text, class_name: Text
+                      ) -> Union[Type[BaseReport], Type['BaseDashboard'], None]:
     """Get class definition by path to file.
 
     Args:
@@ -58,8 +59,10 @@ def get_class_by_path(path: Text, class_name: Text) -> Union[Type[BaseReport], T
         Dashboard or Report.
     """
     try:
-        cls_path = '.'.join(os.path.splitext(os.path.normcase(path))[0].split(os.sep))
-        spec = spec_from_file_location(cls_path, os.path.join(settings.OBJECTS_PATH, path))
+        cls_path = '.'.join(
+            os.path.splitext(os.path.normcase(path))[0].split(os.sep))
+        spec = spec_from_file_location(
+            cls_path, os.path.join(settings.OBJECTS_PATH, path))
         module = module_from_spec(spec)
         spec.loader.exec_module(module)
 
@@ -77,7 +80,9 @@ def get_reports_list() -> List[Union[BaseReport, None]]:
         List of reports instances.
     """
     reports_list = []
-    files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'reports', '**', '[!_]*.py'), recursive=True)
+    files = glob.iglob(
+        os.path.join(settings.OBJECTS_PATH, 'reports', '**', '[!_]*.py'),
+        recursive=True)
     files = list(files)
     for file in sorted(files):
         file = os.path.relpath(file, settings.OBJECTS_PATH + os.sep)
@@ -93,7 +98,9 @@ def get_datasets_list() -> List[Union[BaseDataset, None]]:
         List of datasets instances.
     """
     datasets_list = []
-    files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'datasets', '**', '[!_]*.py'), recursive=True)
+    files = glob.iglob(
+        os.path.join(settings.OBJECTS_PATH, 'datasets', '**', '[!_]*.py'),
+        recursive=True)
     files = list(files)
     for file in sorted(files):
         file = os.path.relpath(file, settings.OBJECTS_PATH + os.sep)
@@ -102,22 +109,28 @@ def get_datasets_list() -> List[Union[BaseDataset, None]]:
     return datasets_list
 
 
-def get_dashboards_hierarchy() -> Dict[Type['BaseDashboard'], List[Type['BaseDashboard']]]:
+def get_dashboards_hierarchy(
+) -> Dict[Type['BaseDashboard'], List[Type['BaseDashboard']]]:
     """Get hierarchy of dashboards classes.
 
     Returns:
         Dict of dashboards classes.
     """
     dashboards_hierarchy = {}
-    files = glob.iglob(os.path.join(settings.OBJECTS_PATH, 'dashboards', '**', '[!_]*.py'), recursive=True)
+    files = glob.iglob(
+        os.path.join(settings.OBJECTS_PATH, 'dashboards', '**', '[!_]*.py'),
+        recursive=True)
     files = list(files)
     for file in sorted(files):
         file = os.path.relpath(file, settings.OBJECTS_PATH + os.sep)
         cls = get_class_by_path(file, 'Dashboard')
-        if str(cls) not in [str(key) for key in dashboards_hierarchy.keys()] and len(file.split(os.sep)) == 2:
+        if str(cls) not in [str(key) for key in dashboards_hierarchy.keys()
+                            ] and len(file.split(os.sep)) == 2:
             dashboards_hierarchy[cls] = []
         if len(file.split(os.sep)) == 3:
-            if str(cls.get_parent_dashboard_class()) not in [str(key) for key in dashboards_hierarchy.keys()]:
+            if str(cls.get_parent_dashboard_class()) not in [
+                str(key) for key in dashboards_hierarchy.keys()
+            ]:
                 dashboards_hierarchy[cls.get_parent_dashboard_class()] = [cls]
             else:
                 for key in dashboards_hierarchy.keys():
@@ -127,7 +140,8 @@ def get_dashboards_hierarchy() -> Dict[Type['BaseDashboard'], List[Type['BaseDas
     return dashboards_hierarchy
 
 
-def convert_dashboard_class_to_tuple(dashboard_class: Type['BaseDashboard']) -> Tuple:
+def convert_dashboard_class_to_tuple(
+        dashboard_class: Type['BaseDashboard']) -> Tuple:
     """Transforms dashboard to tuple for template.
 
     Args:
@@ -137,10 +151,10 @@ def convert_dashboard_class_to_tuple(dashboard_class: Type['BaseDashboard']) -> 
         Tuple with dashboard info.
     """
     board = dashboard_class(QueryDict())
-    result = [board.id,
-              board.title,
-              board.icon,
-              dashboard_class.get_parent_dashboard_id()]
+    result = [
+        board.id, board.title, board.icon,
+        dashboard_class.get_parent_dashboard_id()
+    ]
     return tuple(result)
 
 
@@ -154,11 +168,14 @@ def get_dashboards_hierarchy_for_template() -> Dict:
     dashboards_hierarchy_for_template = {}
 
     for dashboards_hierarchy_class_key in dashboards_hierarchy_class.keys():
-        temp_key = convert_dashboard_class_to_tuple(dashboards_hierarchy_class_key)
+        temp_key = convert_dashboard_class_to_tuple(
+            dashboards_hierarchy_class_key)
         dashboards_hierarchy_for_template[temp_key] = []
-        for dashboards_hierarchy_class_value in dashboards_hierarchy_class[dashboards_hierarchy_class_key]:
+        for dashboards_hierarchy_class_value in dashboards_hierarchy_class[
+            dashboards_hierarchy_class_key]:
             dashboards_hierarchy_for_template[temp_key].append(
-                convert_dashboard_class_to_tuple(dashboards_hierarchy_class_value))
+                convert_dashboard_class_to_tuple(
+                    dashboards_hierarchy_class_value))
     return dashboards_hierarchy_for_template
 
 
@@ -173,6 +190,7 @@ def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60) -> Callable:
     """
 
     def cache_dataframe_inner(fn):
+
         def cache_get_key(*args) -> Text:
             serialise = []
             for arg in args:
@@ -186,9 +204,10 @@ def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60) -> Callable:
             # getting string for dataset's module name relative objects/datasets
             splitted_module_name = str(type(args[0])).split('.')
             if 'objects' in splitted_module_name:
-                splitted_module_name = splitted_module_name[splitted_module_name.index('datasets') + 1: -1]
+                splitted_module_name = splitted_module_name[
+                                       splitted_module_name.index('datasets') + 1:-1]
             else:
-                splitted_module_name = splitted_module_name[1: -1]
+                splitted_module_name = splitted_module_name[1:-1]
             module_name = '.'.join(splitted_module_name)
             _cache_key = cache_get_key(module_name, fn.__name__, args[1:])
             result = cache.get(_cache_key)

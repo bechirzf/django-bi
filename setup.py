@@ -41,14 +41,9 @@ setup(
     url='https://zhelyabuzhsky.com/',
     author='Ilya Zhelyabuzhsky',
     author_email='zhelyabuzhsky@icloud.com',
-    install_requires=[
-        'Django',
-        'pandas'
-    ],
+    install_requires=['Django', 'pandas'],
     test_suite='tests',
-    tests_require=[
-        'pytest-django'
-    ],
+    tests_require=['pytest-django'],
     cmdclass={'test': PyTest},
     classifiers=[
         'Environment :: Web Environment',

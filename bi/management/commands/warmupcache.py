@@ -13,4 +13,5 @@ class Command(BaseCommand):
         for dataset in datasets:
             for method in type(dataset).get_cached_dataset_methods():
                 getattr(dataset, method)()
-        self.stdout.write(self.style.SUCCESS('Cache was successfully warmed up'))
+        self.stdout.write(
+            self.style.SUCCESS('Cache was successfully warmed up'))

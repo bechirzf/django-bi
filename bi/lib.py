@@ -2,11 +2,12 @@ import glob
 import hashlib
 import os.path
 from importlib.util import spec_from_file_location, module_from_spec
-from typing import List, Tuple, Type, Union, Dict, Text, TYPE_CHECKING
+from typing import List, Tuple, Type, Union, Dict, Text, Callable, TYPE_CHECKING
 
 from django.conf import settings
 from django.core.cache import cache
 from django.http import QueryDict
+from pandas import DataFrame
 
 from bi.models.dataset import BaseDataset
 from bi.models.report import BaseReport
@@ -161,7 +162,7 @@ def get_dashboards_hierarchy_for_template() -> Dict:
     return dashboards_hierarchy_for_template
 
 
-def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60):
+def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60) -> Callable:
     """Decorator for caching dataframe in dataset's get_dataframe method.
 
     Args:
@@ -172,7 +173,7 @@ def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60):
     """
 
     def cache_dataframe_inner(fn):
-        def cache_get_key(*args):
+        def cache_get_key(*args) -> Text:
             serialise = []
             for arg in args:
                 serialise.append(str(arg))
@@ -181,7 +182,7 @@ def cache_dataframe(timeout=1 * 7 * 24 * 60 * 60):
             # TODO: remove md5, return in format <dataset_name>.md5(params)
             return key
 
-        def memoized_func(*args):
+        def memoized_func(*args) -> DataFrame:
             # getting string for dataset's module name relative objects/datasets
             splitted_module_name = str(type(args[0])).split('.')
             if 'objects' in splitted_module_name:

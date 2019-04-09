@@ -1,13 +1,5 @@
 {% load gravatar %}
 
-<script>
-    // TODO: move to separate js file
-    async function flushCache() {
-        let response = await fetch('/api/flush-cache/');
-        return await response.json();
-    }
-</script>
-
 <header class="main-header">
 
     <a class="logo" href="/">
